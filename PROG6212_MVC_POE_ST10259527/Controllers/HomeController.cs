@@ -19,7 +19,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             return View();
         }
-
+        
+        public IActionResult Privacy()
+        {
+            return View();
+        }
         // POST: /Home/Submit
         [HttpPost]
         public IActionResult Submit(ClaimModel model)

@@ -1,0 +1,88 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .SignUp-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .SignUp-container h2 {
+                text-align: center;
+            }
+
+            .SignUp-container input[type="text"],
+            .SignUp-container input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            .SignUp-container input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .login-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+        .footer {
+            background-color: rgba(23, 23, 23, 0.2);
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="SignUp-container">
+        <h2>Sign Up</h2>
+        <form action="SignUp" method="post">
+            <input type="text" name="Name" placeholder="Name" required>
+            <input type="text" name="Surname" placeholder="Surname" required>
+            <input type="text" name="Email" placeholder="Email" required>
+            <input type="text" name="Password" placeholder="Password" required>
+            <input type="submit" value="Sign Up">
+        </form>
+        <div class="login-link">
+            <a asp-area="" asp-controller="User" asp-action="Login">Login</a>
+        </div>
+    </div>
+
+</body>
+</html>
+
+

@@ -2,25 +2,71 @@
     ViewData["Title"] = "Submit Claim";
 }
 
-<div class="container mt-5">
-    <h1 class="mb-4">Submit Claim</h1>
+<style>
+    body {
+       
+        color: #343a40;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+        color: #343a40;
+    }
+
+    .form-control {      
+        border: 1px solid #ced4da;
+        color: #343a40;
+    }
+
+        .form-control:focus {         
+            color: #343a40;
+            border-color: #80bdff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    .footer {
+        background-color: rgba(23, 23, 23, 0.2);
+        text-align: center;
+        color: white;
+    }
+    
+</style>
+
+    <div class="d-flex align-items-center mb-4">   
+        <h1 class="mb-0 ms-3">Submit Claim</h1>
+    </div>
 
     <form asp-action="Submit" method="post">
-        <div class="form-group">
-            <label for="lecturerName">Lecturer Name</label>
-            <input type="text" class="form-control" id="lecturerName" name="LecturerName" required />
+        <div class="form-group mb-3">
+            <label for="lecturerName" class="form-label">Lecturer Name</label>
+            <input type="text" class="form-control" id="lecturerName" name="LecturerName" placeholder="Enter your full name" required />
         </div>
 
-        <div class="form-group">
-            <label for="hoursWorked">Hours Worked</label>
-            <input type="number" class="form-control" id="hoursWorked" name="HoursWorked" required />
+        <div class="form-group mb-3">
+            <label for="hoursWorked" class="form-label">Hours Worked</label>
+            <input type="number" class="form-control" id="hoursWorked" name="HoursWorked" min="0" placeholder="Enter the number of hours worked" required />
         </div>
 
-        <div class="form-group">
-            <label for="hourlyRate">Hourly Rate</label>
-            <input type="number" step="0.01" class="form-control" id="hourlyRate" name="HourlyRate" required />
+        <div class="form-group mb-4">
+            <label for="hourlyRate" class="form-label">Hourly Rate</label>
+            <input type="number" step="0.01" class="form-control" id="hourlyRate" name="HourlyRate" min="0" placeholder="Enter your hourly rate" required />
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit Claim</button>
+        <button type="submit" class="btn btn-primary w-100">Submit Claim</button>
     </form>
-</div>

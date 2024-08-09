@@ -2,6 +2,56 @@
     ViewData["Title"] = "Verify Claims";
 }
 
-<h1>Verify Claims</h1>
-<p>Here you can verify and approve claims.</p>
-<!-- Add logic to display a list of claims for verification -->
+<div class="container mt-5">
+    <h1>Verify Claims</h1>
+
+    <!-- Placeholder for success or error messages -->
+    <div id="message" class="alert alert-success" role="alert" style="display:none;">
+        <!-- This will be updated dynamically when a claim is approved or rejected -->
+    </div>
+
+    <!-- Claims table -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Lecturer Name</th>
+                <th scope="col">Hours Worked</th>
+                <th scope="col">Hourly Rate</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row for a claim -->
+            <tr>
+                <th scope="row">1</th>
+                <td>John Doe</td>
+                <td>40</td>
+                <td>$50.00</td>
+                <td>$2,000.00</td>
+                <td>
+                    <button class="btn btn-success btn-sm" onclick="approveClaim(1)">Approve</button>
+                    <button class="btn btn-danger btn-sm" onclick="rejectClaim(1)">Reject</button>
+                </td>
+            </tr>
+            <!-- Repeat for additional claims -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function approveClaim(claimId) {
+        // Logic to approve the claim (e.g., AJAX request to server)
+        document.getElementById('message').style.display = 'block';
+        document.getElementById('message').textContent = 'Claim ' + claimId + ' approved successfully!';
+        // Further logic to remove the row from the table or mark it as approved
+    }
+
+    function rejectClaim(claimId) {
+        // Logic to reject the claim (e.g., AJAX request to server)
+        document.getElementById('message').style.display = 'block';
+        document.getElementById('message').textContent = 'Claim ' + claimId + ' rejected.';
+        // Further logic to remove the row from the table or mark it as rejected
+    }
+</script>
