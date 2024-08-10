@@ -2,7 +2,7 @@
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
-    public class ProfileController : Controller
+    public class AdminController : Controller
     {
         public IActionResult Login()
         {
@@ -13,14 +13,17 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             return View();
         }
-        public IActionResult LecturerLogin()
+        public IActionResult VerifyClaimsView()
         {
             return View();
         }
-
-        public IActionResult LecturerSignUp()
+       
+        [HttpPost]
+        public IActionResult Login(int claimId)
         {
-            return View();
+            // Handle claim approval logic here
+            return RedirectToAction("VerifyClaimsView");
         }
     }
 }
+

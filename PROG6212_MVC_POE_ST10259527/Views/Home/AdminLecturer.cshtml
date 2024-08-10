@@ -11,11 +11,11 @@
 
     .container {
         max-width: 400px;
-        margin-top: 50px;
+        margin: 50px auto;
         background-color: #ffffff;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+       
     }
 
     h1 {
@@ -25,10 +25,22 @@
         margin-bottom: 20px;
     }
 
+    .btn-primary,
+    .btn-secondary {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
-        width: 100%;
+        color: #fff;
     }
 
         .btn-primary:hover {
@@ -39,8 +51,7 @@
     .btn-secondary {
         background-color: #6c757d;
         border-color: #6c757d;
-        width: 100%;
-        margin-top: 10px;
+        color: #fff;
     }
 
         .btn-secondary:hover {
@@ -55,14 +66,12 @@
     .mb-4 {
         margin-bottom: 1.5rem;
     }
-
 </style>
 
+<div class="container">
     <h1>Login</h1>
-    <p class="text-center">Please select your login type</p>
+    <p class="text-center mb-4">Please select your login type</p>
 
-    <div class="d-grid gap-2">
-        <a href="~/Lecturer/LecturerLogin" class="btn btn-primary">Login as Lecturer</a>
-        <a href="~/Admin/Login" class="btn btn-secondary">Login as Admin</a>
-    </div>
-
+    <a href="~/Lecturer/LecturerLogin" class="btn btn-primary">Login as Lecturer</a>
+    <a href="~/Admin/Login" class="btn btn-secondary">Login as Admin</a>
+</div>
