@@ -13,5 +13,14 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             return View();
         }
+        public IActionResult LecturerLogin()
+        {
+            return View();
+        }
+
+        public IActionResult LecturerSignUp()
+        {
+            return View();
+        }
     }
 }

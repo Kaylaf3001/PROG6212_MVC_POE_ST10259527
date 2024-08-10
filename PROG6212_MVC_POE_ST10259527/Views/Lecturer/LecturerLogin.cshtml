@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+    
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login Page</title>
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .login-container h2 {
+                text-align: center;
+            }
+
+            .login-container input[type="text"],
+            .login-container input[type="password"] {
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            .login-container input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .signup-link a {
+                color: #007bff;
+                text-decoration: none;
+            }
+
+        .footer {
+            background-color: rgba(23, 23, 23, 0.2);
+            text-align: center;
+            color: white;
+        }
+
+        #notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background-color: #f44336;
+            color: white;
+            visibility: hidden;
+            transition: visibility 0.5s;
+        }
+
+            #notification.show {
+                visibility: visible;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form" action="login" method="post">
+            <input type="text" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+        <div class="signup-link">
+            <a asp-area="" asp-controller="Lecturer" asp-action="LecturerSignUp">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification">
+        Login failed. Please check your username and password.
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var loginResult = "@ViewData["LoginResult"]";
+            if (loginResult === "1") {
+                var notification = document.getElementById("notification");
+                notification.classList.add("show");
+                setTimeout(function () {
+                    notification.classList.remove("show");
+                }, 3000); // Hide after 3 seconds
+            }
+        });
+    </script>
+
+</body>
+</html>

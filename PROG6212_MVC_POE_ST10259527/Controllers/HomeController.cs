@@ -5,7 +5,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Claims()
         {
             return View();
         }
@@ -21,6 +21,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         }
         
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult AdminLecturer()
         {
             return View();
         }

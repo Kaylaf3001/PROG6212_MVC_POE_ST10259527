@@ -2,6 +2,97 @@
     ViewData["Title"] = "Claim Status";
 }
 
-<h1>Claim Status</h1>
-<p>Here you will see the status of your claims.</p>
-<!-- Add logic to display a list of claims and their statuses -->
+<style>
+    body {
+        color: #343a40;
+        font-family: Arial, sans-serif;
+    }
+
+    
+
+    h1 {
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    p {
+        color: #6c757d;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+            border-top: none;
+            padding: 15px;
+            text-align: left;
+        }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f8f9fa;
+    }
+
+    .badge {
+        font-size: 90%;
+        border-radius: 0.25rem;
+        padding: 0.5em 1em;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+</style>
+
+    <h1>Claim Status</h1>
+    
+    <!-- Claims status table -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Lecturer Name</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row for a claim -->
+            <tr>
+                <th scope="row">1</th>
+                <td>John Doe</td>
+                <td>$2,000.00</td>
+                <td><span class="badge badge-success">Approved</span></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Jane Smith</td>
+                <td>$1,500.00</td>
+                <td><span class="badge badge-warning">Pending</span></td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Michael Brown</td>
+                <td>$1,200.00</td>
+                <td><span class="badge badge-danger">Rejected</span></td>
+            </tr>
+            <!-- Repeat for additional claims -->
+        </tbody>
+    </table>
+

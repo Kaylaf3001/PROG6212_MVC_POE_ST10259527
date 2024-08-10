@@ -10,8 +10,4 @@
     <None Include="wwwroot\Images\POEP1.jpg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Lecturer\" />
-  </ItemGroup>
-
 </Project>
