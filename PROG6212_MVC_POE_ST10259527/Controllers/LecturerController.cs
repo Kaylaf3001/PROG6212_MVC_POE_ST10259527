@@ -25,7 +25,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Submit(ClaimModel model)
+        public IActionResult submit(ClaimModel model)
         {
             // Handle the submission of the claim here
             // Redirect to a status page or list of claims

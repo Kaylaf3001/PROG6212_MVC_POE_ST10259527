@@ -5,36 +5,56 @@
 <style>
     body {
         color: #343a40;
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url("/Images/Background1.jpg");
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
-    .container {
+    .content {
+        flex-grow: 1; /* This makes sure the content area takes up available space without pushing into the footer */
+        display: flex;
+        justify-content: center;
+        align-items: center;
         max-width: 400px;
-        margin: 50px auto;
         background-color: #ffffff;
-        padding: 20px;
-        border-radius: 8px;
-       
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
     h1 {
         color: #343a40;
-        font-weight: bold;
+        font-weight: 700;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        font-size: 28px;
+    }
+
+    p {
+        color: #6c757d;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 16px;
     }
 
     .btn-primary,
     .btn-secondary {
         display: block;
         width: 100%;
-        padding: 10px;
-        font-size: 16px;
+        padding: 12px;
+        font-size: 18px;
         text-align: center;
-        border-radius: 5px;
+        border-radius: 8px;
         text-decoration: none;
-        margin-top: 10px;
+        margin-top: 15px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn-primary {
@@ -46,6 +66,7 @@
         .btn-primary:hover {
             background-color: #0056b3;
             border-color: #0056b3;
+            transform: translateY(-2px);
         }
 
     .btn-secondary {
@@ -57,27 +78,16 @@
         .btn-secondary:hover {
             background-color: #5a6268;
             border-color: #545b62;
+            transform: translateY(-2px);
         }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .mb-4 {
-        margin-bottom: 1.5rem;
-    }
-
-    .footer {
-        background-color: rgba(23, 23, 23, 0.2);
-        text-align: center;
-        color: white;
-    }
 </style>
 
-<div class="container">
-    <h1>Login</h1>
-    <p class="text-center mb-4">Please select your login type</p>
+<div class="content">
+    <div class="container">
+        <h1>Login</h1>
+        <p>Please select your login type</p>
 
-    <a href="~/Lecturer/LecturerLogin" class="btn btn-primary">Login as Lecturer</a>
-    <a href="~/Admin/Login" class="btn btn-secondary">Login as Admin</a>
+        <a href="~/Lecturer/LecturerLogin" class="btn btn-primary">Login as Lecturer</a>
+        <a href="~/Admin/Login" class="btn btn-secondary">Login as Admin</a>
+    </div>
 </div>
