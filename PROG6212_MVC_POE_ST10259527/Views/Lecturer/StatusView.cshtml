@@ -8,8 +8,6 @@
         font-family: Arial, sans-serif;
     }
 
-    
-
     h1 {
         color: #343a40;
         font-weight: bold;
@@ -58,41 +56,58 @@
         color: #fff;
     }
 
+    /* Add some margin to the button */
+    .btn-add {
+        margin-top: 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+        .btn-add:hover {
+            background-color: #0056b3;
+        }
+
 </style>
 
-    <h1>Claim Status</h1>
-    
-    <!-- Claims status table -->
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Lecturer Name</th>
-                <th scope="col">Total Amount</th>
-                <th scope="col">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Example row for a claim -->
-            <tr>
-                <th scope="row">1</th>
-                <td>John Doe</td>
-                <td>R20,000.00</td>
-                <td><span class="badge badge-success">Approved</span></td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-            <td>John Doe</td>
-                <td>R10,500.00</td>
-                <td><span class="badge badge-warning">Pending</span></td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-            <td>John Doe</td>
-                <td>R10,200.00</td>
-                <td><span class="badge badge-danger">Rejected</span></td>
-            </tr>
-            <!-- Repeat for additional claims -->
-        </tbody>
-    </table>
+<h1>Claim Status</h1>
 
+<!-- Add New Claim button -->
+<a href="/Lecturer/Claims" class="btn btn-add">Add New Claim</a>
+
+<!-- Claims status table -->
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Lecturer Name</th>
+            <th scope="col">Total Amount</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Example row for a claim -->
+        <tr>
+            <th scope="row">1</th>
+            <td>John Doe</td>
+            <td>R20,000.00</td>
+            <td><span class="badge badge-success">Approved</span></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>John Doe</td>
+            <td>R10,500.00</td>
+            <td><span class="badge badge-warning">Pending</span></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>John Doe</td>
+            <td>R10,200.00</td>
+            <td><span class="badge badge-danger">Rejected</span></td>
+        </tr>
+        <!-- Repeat for additional claims -->
+    </tbody>
+</table>
