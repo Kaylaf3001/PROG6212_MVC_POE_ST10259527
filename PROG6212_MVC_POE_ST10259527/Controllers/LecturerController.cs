@@ -29,7 +29,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             // Handle the submission of the claim here
             // Redirect to a status page or list of claims
-            return RedirectToAction("Claims");
+            return RedirectToAction("StatusView");
         }
         [HttpPost]
         public IActionResult Login(string name, string password)
