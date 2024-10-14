@@ -25,18 +25,15 @@ namespace PROG6212_MVC_POE_ST10259527.Services
         }
         public async Task<UserProfileModel> GetUserByEmailAsync(string email)
         {
-            // This assumes you stored the Email as a property in your UserProfileModel
-            // You might need to modify this if you are using a different storage approach
-            var filter = $"Email eq '{email}'"; // Azure Table Storage OData filter
+            var filter = $"Email eq '{email}'"; // Ensure this is strongly typed
             var entities = _tableClient.Query<UserProfileModel>(filter);
 
-            // Use a regular foreach loop
             foreach (var entity in entities)
             {
-                return entity; // Return the first matching user
+                return entity;
             }
-
-            return null; // Return null if no user found
+            return null;
         }
     }
+
 }

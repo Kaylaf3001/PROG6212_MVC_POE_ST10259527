@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model PROG6212_MVC_POE_ST10259527.Models.UserProfileModel
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -75,6 +77,7 @@
             <input type="text" name="LastName" placeholder="Surname" required>
             <input type="text" name="Email" placeholder="Email" required>
             <input type="text" name="Password" placeholder="Password" required>
+            <input type="hidden" asp-for="Role" value="Admin"  />
             <input type="submit" value="Sign Up">
         </form>
         <div class="login-link">

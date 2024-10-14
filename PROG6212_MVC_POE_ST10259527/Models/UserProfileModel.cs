@@ -18,6 +18,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
 
         public UserProfileModel()
         {

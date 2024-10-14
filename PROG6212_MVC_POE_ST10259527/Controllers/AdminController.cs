@@ -31,31 +31,39 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(UserProfileModel userProfile)
         {
+            // Ensure the role is set as Admin
+            userProfile.Role = "Admin";
+
             if (ModelState.IsValid)
             {
-                // Add the user profile to Azure Table Storage
                 await _tableServices.AddEntityAsync(userProfile);
                 return RedirectToAction("Login");
             }
-            return View(userProfile);  // Return to SignUp view if model is invalid
+            return View(userProfile);
         }
-
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
             if (ModelState.IsValid)
             {
-                // Validate the user credentials
                 var user = await _tableServices.GetUserByEmailAsync(loginModel.Email);
                 if (user != null && user.Password == loginModel.Password)
                 {
-                    // Logic for a successful login (e.g., setting session or cookie)
-                    // Here you can redirect to a dashboard or home page
-                    return RedirectToAction("VerifyClaimsView");
+                    if (user.Role == "Admin")
+                    {
+                        // Redirect to Admin's dashboard
+                        return RedirectToAction("VerifyClaimsView");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "You are not authorized to access the admin dashboard.");
+                        return View(loginModel);
+                    }
                 }
                 ModelState.AddModelError("", "Invalid login attempt.");
             }
-            return View(loginModel); // Return to login view if model is invalid or login fails
+            return View(loginModel);
         }
+
     }
 }
