@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PROG6212_MVC_POE_ST10259527.Models.ClaimsModel
+@{
     ViewData["Title"] = "Submit Claim";
 }
 
@@ -49,7 +50,7 @@
     <h1>Submit Claim</h1>
 </div>
 
-<form asp-action="Submit" method="post" enctype="multipart/form-data">
+<form asp-action="AddClaim" method="post" enctype="multipart/form-data">
 
     <div class="form-group mb-3">
         <label for="hoursWorked" class="form-label">Hours Worked</label>

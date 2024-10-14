@@ -16,6 +16,8 @@ namespace PROG6212_MVC_POE_ST10259527
 
             // Register your custom services
             builder.Services.AddSingleton<TableServices>();
+            builder.Services.AddSingleton<FileService>(); 
+
 
             var app = builder.Build();
 

@@ -6,6 +6,7 @@ namespace PROG6212_MVC_POE_ST10259527.Services
     public class TableServices
     {
         private readonly TableClient _tableClient;
+        private readonly TableClient _tableClaimsClient;
 
         public TableServices(IConfiguration configuration)
         {
@@ -15,6 +16,8 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             _tableClient = serviceClient.GetTableClient("userTable");
             _tableClient.CreateIfNotExists();
 
+            _tableClaimsClient = serviceClient.GetTableClient("lecturersClaims");
+            _tableClaimsClient.CreateIfNotExists();
 
         }
 
@@ -34,6 +37,10 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             }
             return null;
         }
-    }
 
+        public async Task AddClaim(ClaimsModel claim)
+        {
+            await _tableClient.AddEntityAsync(claim);
+        }
+    }
 }
