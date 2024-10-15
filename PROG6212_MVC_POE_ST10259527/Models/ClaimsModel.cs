@@ -5,6 +5,8 @@ namespace PROG6212_MVC_POE_ST10259527.Models
 {
     public class ClaimsModel : ITableEntity
     {
+        private double? totalAmount;
+
         public string PartitionKey { get; set; }
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
@@ -15,7 +17,9 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public double HoursWorked { get; set; }
         public double HourlyRate { get; set; }
         public string Status { get; set; }
-        public string? SupportingDocumentUrl { get; set; } // New field for file URL
+        public string? SupportingDocumentUrl { get; set; } 
+        public double? TotalAmount { get => (HoursWorked * HourlyRate); }
+
         public ClaimsModel()
         {
             PartitionKey = "Claims";

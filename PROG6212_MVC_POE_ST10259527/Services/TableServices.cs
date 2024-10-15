@@ -1,4 +1,5 @@
-﻿using Azure.Data.Tables;
+﻿using Azure;
+using Azure.Data.Tables;
 using PROG6212_MVC_POE_ST10259527.Models;
 
 namespace PROG6212_MVC_POE_ST10259527.Services
@@ -45,13 +46,24 @@ namespace PROG6212_MVC_POE_ST10259527.Services
 
         public async Task<List<ClaimsModel>> GetAllClaims()
         {
-            List claims = new List<ClaimsModel>();
+            List<ClaimsModel> claims = new List<ClaimsModel>();
 
             await foreach (var claim in _tableClaimsClient.QueryAsync<ClaimsModel>())
             {
                 claims.Add(claim);
             } 
             return claims;
+        }
+        public async Task UpdateClaimStatus(string rowKey, string status)
+        {
+            // Retrieve the claim by RowKey
+            var claim = _tableClaimsClient.Query<ClaimsModel>(c => c.RowKey == rowKey).FirstOrDefault();
+
+            if (claim != null)
+            {
+                claim.Status = status; // Update the status
+                await _tableClaimsClient.UpdateEntityAsync(claim, ETag.All, TableUpdateMode.Replace);
+            }
         }
     }
 }

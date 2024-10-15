@@ -7,11 +7,13 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     public class AdminController : Controller
     {
         private readonly TableServices _tableServices;
+        private readonly TableServices _tableClaimsServices;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public AdminController(TableServices tableServices, IHttpContextAccessor httpContextAccessor)
+        public AdminController(TableServices tableServices, IHttpContextAccessor httpContextAccessor, TableServices tableClaimsServices)
         {
             _tableServices = tableServices;
             _httpContextAccessor = httpContextAccessor;
+            _tableClaimsServices = tableClaimsServices;
         }
 
         public IActionResult Login()
@@ -24,10 +26,33 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View();
         }
 
-        public IActionResult VerifyClaimsView()
+        public async Task<IActionResult> VerifyClaimsView()
         {
-            return View();
+            var claims = await _tableServices.GetAllClaims();
+            return View(claims);
+
+
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveClaim(string claimId)
+        {
+            // Get the claim by ID
+            await _tableClaimsServices.UpdateClaimStatus(claimId, "Approved");
+          
+            return Json(new { success = true, message = $"Claim {claimId} approved successfully!" });
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectClaim(string claimId)
+        {
+            // Get the claim by ID
+            await _tableServices.UpdateClaimStatus(claimId, "Rejected");
+ 
+            return Json(new { success = true, message = $"Claim {claimId} rejected." });
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> SignUp(UserProfileModel userProfile)
