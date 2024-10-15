@@ -8,15 +8,17 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
     public class LecturerController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly TableServices _tableServices;
         private readonly TableServices _tableClaimsServices;
         private readonly FileService _fileService;
 
-        public LecturerController(TableServices tableServices, TableServices tableClaimsServices, FileService fileService)
+        public LecturerController(TableServices tableServices, TableServices tableClaimsServices, FileService fileService, IHttpContextAccessor httpContextAccessor)
         {
             _tableServices = tableServices;
             _tableClaimsServices = tableClaimsServices;
             _fileService = fileService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult LecturerLogin()
@@ -42,31 +44,30 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View();
         }
 
-        public IActionResult StatusView()
+        public async Task<IActionResult> StatusView()
         {
-            return View();
+            var claims = await _tableServices.GetAllClaims();
+            return View(claims);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddClaim(ClaimsModel claim, IFormFile SupportingDocument)
         {
             claim.Status = "Pending"; // Set the claim status to Pending
+            claim.LecturerID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
 
-            if (ModelState.IsValid)
+            if (SupportingDocument != null && SupportingDocument.Length > 0)
             {
-                if (SupportingDocument != null && SupportingDocument.Length > 0)
-                {
-                    // Upload the file to Azure File Share
-                    var fileUrl = await _fileService.UploadFileAsync(SupportingDocument.FileName, SupportingDocument.OpenReadStream());
-                    claim.SupportingDocumentUrl = fileUrl; // Store the file URL in the claim
-                }
-
-                // Add the claim to the table storage
-                await _tableClaimsServices.AddClaim(claim);
-
-                return RedirectToAction("StatusView");
+                // Upload the file to Azure File Share
+                var fileUrl = await _fileService.UploadFileAsync(SupportingDocument.FileName, SupportingDocument.OpenReadStream());
+                claim.SupportingDocumentUrl = fileUrl; // Store the file URL in the claim
             }
 
+            // Add the claim to the table storage
+            await _tableClaimsServices.AddClaim(claim);
+
+            return RedirectToAction("StatusView");
+           
             return View(claim);
         }
 
@@ -74,6 +75,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
+            
             if (ModelState.IsValid)
             {
                 var user = await _tableServices.GetUserByEmailAsync(loginModel.Email);
@@ -81,6 +83,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 {
                     if (user.Role == "Lecturer")
                     {
+                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
                         // Redirect to Lecturer's dashboard
                         return RedirectToAction("AddClaim");
                     }

@@ -7,10 +7,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     public class AdminController : Controller
     {
         private readonly TableServices _tableServices;
-
-        public AdminController(TableServices tableServices)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AdminController(TableServices tableServices, IHttpContextAccessor httpContextAccessor)
         {
             _tableServices = tableServices;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Login()
@@ -51,6 +52,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 {
                     if (user.Role == "Admin")
                     {
+                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
                         // Redirect to Admin's dashboard
                         return RedirectToAction("VerifyClaimsView");
                     }

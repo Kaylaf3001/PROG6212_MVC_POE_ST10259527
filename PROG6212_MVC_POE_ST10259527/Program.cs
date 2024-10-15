@@ -16,8 +16,16 @@ namespace PROG6212_MVC_POE_ST10259527
 
             // Register your custom services
             builder.Services.AddSingleton<TableServices>();
-            builder.Services.AddSingleton<FileService>(); 
+            builder.Services.AddSingleton(new FileService(connectionString));
 
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -31,6 +39,9 @@ namespace PROG6212_MVC_POE_ST10259527
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Use session middle ware
+            app.UseSession();
 
             app.UseRouting();
 

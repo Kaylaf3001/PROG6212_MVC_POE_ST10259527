@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<PROG6212_MVC_POE_ST10259527.Models.ClaimsModel>
+@{
     ViewData["Title"] = "Claim Status";
 }
 
@@ -76,38 +77,39 @@
 <h1>Claim Status</h1>
 
 <!-- Add New Claim button -->
-<a href="/Lecturer/Claims" class="btn btn-add">Add New Claim</a>
+<a href="/Lecturer/AddClaim" class="btn btn-add">Add New Claim</a>
 
 <!-- Claims status table -->
 <table class="table table-striped mt-4">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Lecturer Name</th>
+            <th scope="col">Lecturer ID</th>
             <th scope="col">Total Amount</th>
             <th scope="col">Status</th>
         </tr>
     </thead>
     <tbody>
-        <!-- Example row for a claim -->
-        <tr>
-            <th scope="row">1</th>
-            <td>John Doe</td>
-            <td>R20,000.00</td>
-            <td><span class="badge badge-success">Approved</span></td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>John Doe</td>
-            <td>R10,500.00</td>
-            <td><span class="badge badge-warning">Pending</span></td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>John Doe</td>
-            <td>R10,200.00</td>
-            <td><span class="badge badge-danger">Rejected</span></td>
-        </tr>
-        <!-- Repeat for additional claims -->
-    </tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@item.RowKey</th>
+                <td>@item.LecturerID</td>
+                <td>(@item.HourlyRate * @item.HoursWorked)</td>
+                <td>
+                    @if (item.Status == "Pending")
+                    {
+                        <span class="badge badge-warning">@item.Status</span>
+                    }
+                    else if (item.Status == "Approved")
+                    {
+                        <span class="badge badge-success">@item.Status</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">@item.Status</span>
+                    }
+                </td>
+            </tr>
+        }
 </table>

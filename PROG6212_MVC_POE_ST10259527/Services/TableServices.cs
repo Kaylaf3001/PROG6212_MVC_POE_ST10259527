@@ -40,7 +40,18 @@ namespace PROG6212_MVC_POE_ST10259527.Services
 
         public async Task AddClaim(ClaimsModel claim)
         {
-            await _tableClient.AddEntityAsync(claim);
+            await _tableClaimsClient.AddEntityAsync(claim);
+        }
+
+        public async Task<List<ClaimsModel>> GetAllClaims()
+        {
+            List claims = new List<ClaimsModel>();
+
+            await foreach (var claim in _tableClaimsClient.QueryAsync<ClaimsModel>())
+            {
+                claims.Add(claim);
+            } 
+            return claims;
         }
     }
 }
