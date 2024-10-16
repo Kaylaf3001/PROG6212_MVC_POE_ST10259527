@@ -89,8 +89,17 @@ namespace PROG6212_MVC_POE_ST10259527.Services
 
         public async Task<ClaimsModel> GetClaimById(string claimId)
         {
-            var claim = await _tableClient.GetEntityAsync<ClaimsModel>("Claims", claimId);
-            return claim;
+            try
+            {
+                var claim = await _tableClaimsClient.GetEntityAsync<ClaimsModel>("Claims", claimId);
+                return claim;
+            }
+            catch (RequestFailedException e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            
         }
 
         //-----------------------------------------------------------------------------------------------------
