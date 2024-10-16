@@ -39,6 +39,8 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> ApproveClaim(string claimId)
         {
+
+            //TODO: First break points hit but not adding
             var claim = await _tableClaimsServices.GetClaimById(claimId);
 
             var approvedClaim = ClaimsModel.ApproveClaim(claim);
