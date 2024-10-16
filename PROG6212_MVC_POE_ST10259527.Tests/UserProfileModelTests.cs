@@ -5,6 +5,9 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
 {
     public class UserProfileModelTests
     {
+        //-----------------------------------------------------------------------------------------------------
+        // Dummy database for testing
+        //-----------------------------------------------------------------------------------------------------
         private List<UserProfileModel> _dummyDatabase;
 
         public UserProfileModelTests()
@@ -15,7 +18,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
                     new UserProfileModel("Jane", "Smith", "jane.smith@example.com", "password456", true)
                 };
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Test LoginUser method
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void TestLoginUser_ValidCredentials_ReturnsUser()
         {
@@ -34,7 +41,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("John", result.FirstName);
             Assert.Equal("Doe", result.LastName);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Test LoginUser method with invalid credentials
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void TestLoginUser_InvalidCredentials_ReturnsNull()
         {
@@ -51,7 +62,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             // Assert
             Assert.Null(result);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Test LoginUser method with non-existent user
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void TestLoginUser_NonExistentUser_ReturnsNull()
         {
@@ -68,7 +83,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             // Assert
             Assert.Null(result);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Test SignUpUser method
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void TestSignUpUser_ValidData_ReturnsNewUser()
         {
@@ -105,7 +124,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("password789", addedUser.Password);
             Assert.False(addedUser.IsAdmin);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Test SignUpUser method as admin
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void TestSignUpUser_AsAdmin_ReturnsNewAdminUser()
         {
@@ -142,5 +165,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("adminpassword", addedUser.Password);
             Assert.True(addedUser.IsAdmin);
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------

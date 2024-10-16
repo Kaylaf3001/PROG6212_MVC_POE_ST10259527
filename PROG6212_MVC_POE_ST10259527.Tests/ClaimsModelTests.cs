@@ -9,6 +9,9 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
 {
     public class ClaimsModelTests
     {
+        //-----------------------------------------------------------------------------------------------------
+        //Tests the calculate total amount method
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void CalculateTotalAmount_ValidData_ReturnsCorrectAmount()
         {
@@ -25,7 +28,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             // Assert
             Assert.Equal(200, result);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        //Tests changing the status of a claim to approved
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void ApproveClaim_ValidClaim_ChangesStatusToApproved()
         {
@@ -41,7 +48,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             // Assert
             Assert.Equal("Approved", result.Status);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        //Tests changing the status of a claim to rejected
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void RejectClaim_ValidClaim_ChangesStatusToRejected()
         {
@@ -57,7 +68,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             // Assert
             Assert.Equal("Rejected", result.Status);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        //Tests if the sorting works correctly
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void GetAllApprovedClaims_ValidData_ReturnsOnlyApprovedClaims()
         {
@@ -76,7 +91,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal(2, result.Count);
             Assert.All(result, claim => Assert.Equal("Approved", claim.Status));
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        //Tests if the sorting works correctly
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void GetAllRejectedClaims_ValidData_ReturnsOnlyRejectedClaims()
         {
@@ -95,7 +114,11 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal(2, result.Count);
             Assert.All(result, claim => Assert.Equal("Rejected", claim.Status));
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        //Tests if the sorting works correctly
+        //-----------------------------------------------------------------------------------------------------
         [Fact]
         public void GetAllPendingClaims_ValidData_ReturnsOnlyPendingClaims()
         {
@@ -114,5 +137,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal(2, result.Count);
             Assert.All(result, claim => Assert.Equal("Pending", claim.Status));
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------

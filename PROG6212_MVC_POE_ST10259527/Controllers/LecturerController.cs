@@ -71,20 +71,27 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return RedirectToAction("StatusView");
         }
         //-----------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------
         // Filter claims by status
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> FilterByStatus(string status)
         {
             var claims = await _tableServices.GetAllClaims();
             var filteredClaims = claims.Where(c => c.Status == status).ToList();
             return View("StatusView", filteredClaims);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
         // Clear filters (show all claims)
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> ClearFilters()
         {
             var claims = await _tableServices.GetAllClaims();
             return View("StatusView", claims);
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------
