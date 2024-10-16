@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
+    //-----------------------------------------------------------------------------------------------------
+    // Constructor for the LecturerController
+    //-----------------------------------------------------------------------------------------------------
     public class LecturerController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -20,12 +23,25 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             _fileService = fileService;
             _httpContextAccessor = httpContextAccessor;
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Displays all the views
+        //-----------------------------------------------------------------------------------------------------
         public IActionResult LecturerLogin()
         {
             return View();
         }
 
+        public IActionResult AddClaim()
+        {
+            return View();
+        }
+        //----------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------
+        //Allows the lecturer to login
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> LecturerSignUp(UserProfileModel userProfile)
         {
             // Ensure the role is set as Lecturer
@@ -38,18 +54,52 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
             return View(userProfile);
         }
+        //-----------------------------------------------------------------------------------------------------
 
-        public IActionResult AddClaim()
+        //-----------------------------------------------------------------------------------------------------
+        //Allows the lecturer to login
+        //-----------------------------------------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> LecturerLogin(LoginModel loginModel)
         {
-            return View();
-        }
 
+            if (ModelState.IsValid)
+            {
+                var user = await _tableServices.GetUserByEmailAsync(loginModel.Email);
+                if (user != null && user.Password == loginModel.Password)
+                {
+                    if (user.Role == "Lecturer")
+                    {
+                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
+                        // Redirect to Lecturer's dashboard
+                        return RedirectToAction("StatusView");
+                    }
+                    else
+                    {
+                        // Return the same view with a notification
+                        ViewData["LoginResult"] = "1"; // 1 indicates failure
+                        return View(loginModel);
+                    }
+                }
+                ViewData["LoginResult"] = "1"; // 1 indicates failure
+            }
+            return View(loginModel);
+        }
+        //-----------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------
+        //Displays the status of the claims
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> StatusView()
         {
             var claims = await _tableServices.GetAllClaims();
             return View(claims);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        //Allows the lecturer to add a claim
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> AddClaim(ClaimsModel claim, IFormFile SupportingDocument)
         {
@@ -67,36 +117,8 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             await _tableClaimsServices.AddClaim(claim);
 
             return RedirectToAction("StatusView");
-           
-            return View(claim);
         }
-
-
-        [HttpPost]
-        public async Task<IActionResult> LecturerLogin(LoginModel loginModel)
-        {
-            
-            if (ModelState.IsValid)
-            {
-                var user = await _tableServices.GetUserByEmailAsync(loginModel.Email);
-                if (user != null && user.Password == loginModel.Password)
-                {
-                    if (user.Role == "Lecturer")
-                    {
-                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
-                        // Redirect to Lecturer's dashboard
-                        return RedirectToAction("AddClaim");
-                    }
-                    else
-                    { 
-                        // Return the same view with a notification
-                        ViewData["LoginResult"] = "1"; // 1 indicates failure
-                        return View(loginModel);
-                    }
-                }
-                ViewData["LoginResult"] = "1"; // 1 indicates failure
-            }
-            return View(loginModel);
-        }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------

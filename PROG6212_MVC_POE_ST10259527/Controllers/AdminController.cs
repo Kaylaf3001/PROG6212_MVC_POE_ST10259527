@@ -4,6 +4,9 @@ using PROG6212_MVC_POE_ST10259527.Services;
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
+    //-----------------------------------------------------------------------------------------------------
+    //Constructor for the AdminController
+    //-----------------------------------------------------------------------------------------------------
     public class AdminController : Controller
     {
         private readonly TableServices _tableServices;
@@ -15,6 +18,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             _httpContextAccessor = httpContextAccessor;
             _tableClaimsServices = tableClaimsServices;
         }
+        //-----------------------------------------------------------------------------------------------------
 
         public IActionResult Login()
         {
@@ -26,7 +30,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View();
         }
 
-
+        //-----------------------------------------------------------------------------------------------------
+        // Displays all the claims that need ot be verified
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> VerifyClaimsView()
         {
             
@@ -45,10 +51,12 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 }
             }
             return View(claims);
-
-
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // This method is called when the admin wants to approve a claim
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> ApproveClaim(string claimId)
         {
@@ -56,9 +64,12 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             await _tableClaimsServices.UpdateClaimStatus(claimId, "Approved");
           
             return Json(new { success = true, message = $"Claim {claimId} approved successfully!" });
-
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // This method is called when the admin wants to reject a claim
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> RejectClaim(string claimId)
         {
@@ -67,8 +78,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
  
             return Json(new { success = true, message = $"Claim {claimId} rejected." });
         }
+        //-----------------------------------------------------------------------------------------------------
 
-
+        //-----------------------------------------------------------------------------------------------------
+        //This method allows a admin to create an account
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> SignUp(UserProfileModel userProfile)
         {
@@ -82,6 +96,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
             return View(userProfile);
         }
+        //-----------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------
+        //This method allows a admin to login
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
@@ -107,6 +126,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
             return View(loginModel);
         }
-
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------

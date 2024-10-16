@@ -92,11 +92,12 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form id="login-form" action="LecturerLogin" method="post">
+        <form id="login-form" asp-controller="Lecturer" asp-action="LecturerLogin" method="post">
             <input type="text" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <input type="submit" value="Login">
+            <input type="submit" value="LecturerLogin">
         </form>
+
         <div class="signup-link">
             <a asp-area="" asp-controller="Lecturer" asp-action="LecturerSignUp">Sign Up</a>
         </div>

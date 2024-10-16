@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PROG6212_MVC_POE_ST10259527.Services
 {
+    //-----------------------------------------------------------------------------------------------------
+    // FileService class
+    //-----------------------------------------------------------------------------------------------------
     public class FileService
     {
         private readonly ShareClient _shareClient;
@@ -16,7 +19,11 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             _shareClient = new ShareClient(connectionString, "lecturerclaimsfiles");
             _shareClient.CreateIfNotExists();
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Upload a file to the file share
+        //-----------------------------------------------------------------------------------------------------
         public async Task<string> UploadFileAsync(string fileName, Stream fileStream)
         {
             // Create a reference to a directory in the file share
@@ -38,5 +45,7 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             // Return the URL of the uploaded file
             return fileClient.Uri.ToString();
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------
