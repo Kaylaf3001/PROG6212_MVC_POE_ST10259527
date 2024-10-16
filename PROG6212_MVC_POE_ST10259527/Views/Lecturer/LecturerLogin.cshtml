@@ -90,10 +90,9 @@
     </style>
 </head>
 <body>
-
     <div class="login-container">
         <h2>Login</h2>
-        <form id="login-form" action="login" method="post">
+        <form id="login-form" action="LecturerLogin" method="post">
             <input type="text" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="submit" value="Login">
@@ -103,23 +102,22 @@
         </div>
     </div>
 
-    <!-- Notification -->
+    <!-- Notification for login failure -->
     <div id="notification">
         Login failed. Please check your username and password.
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var loginResult = "@ViewData["LoginResult"]";
+        document.addEventListener("DOMContentLoaded", function() {
+            var loginResult = "@(ViewData["LoginResult"] ?? "0")";
             if (loginResult === "1") {
                 var notification = document.getElementById("notification");
                 notification.classList.add("show");
-                setTimeout(function () {
+                setTimeout(function() {
                     notification.classList.remove("show");
-                }, 3000); // Hide after 3 seconds
+                }, 3000);
             }
         });
     </script>
-
 </body>
 </html>

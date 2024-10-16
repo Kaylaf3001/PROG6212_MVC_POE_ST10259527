@@ -73,7 +73,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<IActionResult> LecturerLogin(LoginModel loginModel)
         {
             
             if (ModelState.IsValid)
@@ -88,12 +88,13 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                         return RedirectToAction("AddClaim");
                     }
                     else
-                    {
-                        ModelState.AddModelError("", "You are not authorized to access the lecturer dashboard.");
+                    { 
+                        // Return the same view with a notification
+                        ViewData["LoginResult"] = "1"; // 1 indicates failure
                         return View(loginModel);
                     }
                 }
-                ModelState.AddModelError("", "Invalid login attempt.");
+                ViewData["LoginResult"] = "1"; // 1 indicates failure
             }
             return View(loginModel);
         }

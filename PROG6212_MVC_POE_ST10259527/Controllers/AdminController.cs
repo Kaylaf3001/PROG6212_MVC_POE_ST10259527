@@ -26,9 +26,24 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View();
         }
 
+
         public async Task<IActionResult> VerifyClaimsView()
         {
-            var claims = await _tableServices.GetAllClaims();
+            
+           var claims = await _tableServices.GetAllClaims();
+
+            // Only display the claims that are pending
+           foreach (var claim in claims)
+            {
+                if (claim.Status == "Approved")
+                {
+                    claims.Remove(claim);
+                }
+                else if (claim.Status == "Rejected")
+                {
+                    claims.Remove(claim);
+                }
+            }
             return View(claims);
 
 
@@ -83,11 +98,12 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "You are not authorized to access the admin dashboard.");
+                        // Return the same view with a notification
+                        ViewData["LoginResult"] = "1"; // 1 indicates failure
                         return View(loginModel);
                     }
                 }
-                ModelState.AddModelError("", "Invalid login attempt.");
+                ViewData["LoginResult"] = "1"; // 1 indicates failure
             }
             return View(loginModel);
         }

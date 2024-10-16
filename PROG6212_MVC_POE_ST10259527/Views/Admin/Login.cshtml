@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Login Page"; 
+    ViewData["Title"] = "Login Page";
 }
 
 <!DOCTYPE html>
@@ -7,7 +7,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login Page</title>
     <style>
         body {
@@ -102,19 +101,18 @@
         </div>
     </div>
 
-
     <!-- Notification -->
     <div id="notification">
         Login failed. Please check your username and password.
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var loginResult = "@ViewData["LoginResult"]";
             if (loginResult === "1") {
                 var notification = document.getElementById("notification");
                 notification.classList.add("show");
-                setTimeout(function () {
+                setTimeout(function() {
                     notification.classList.remove("show");
                 }, 3000); // Hide after 3 seconds
             }
