@@ -8,10 +8,10 @@
     <title>Sign Up Page</title>
     <style>
         body {
-            background-image: url("/Images/LectureRoom.jpg");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
+            background-image: url("/Images/office.jpg");
         }
 
         .SignUp-container {
@@ -72,16 +72,18 @@
 
     <div class="SignUp-container">
         <h2>Sign Up</h2>
-        <form action="LecturerSignUp" method="post">
-            <input type="text" name="FirstName" placeholder="Name" required>
-            <input type="text" name="LastName" placeholder="Surname" required>
-            <input type="text" name="Email" placeholder="Email" required>
-            <input type="text" name="Password" placeholder="Password" required>
-            <input type="hidden" asp-for="Role" value="Lecturer" />
+        <form asp-action="SignUp" method="post">
+            <input asp-for="FirstName" placeholder="Name" required>
+            <input asp-for="LastName" placeholder="Surname" required>
+            <input asp-for="Email" placeholder="Email" required>
+            <input asp-for="Password" placeholder="Password" required>
+            <label>
+                <input asp-for="IsAdmin" type="checkbox"> Are you an Admin?
+            </label>
             <input type="submit" value="Sign Up">
         </form>
         <div class="login-link">
-            <a asp-area="" asp-controller="Lecturer" asp-action="LecturerLogin">Login</a>
+            <a asp-area="" asp-controller="Home" asp-action="Login">Login</a>
         </div>
     </div>
 

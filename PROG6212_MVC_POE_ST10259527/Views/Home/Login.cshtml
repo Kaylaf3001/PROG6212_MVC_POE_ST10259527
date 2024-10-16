@@ -1,18 +1,16 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Login Page";
-    
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login Page</title>
     <style>
         body {
-            background-image: url("/Images/LectureRoom.jpg");
+            background-image: url("/Images/office.jpg");
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
@@ -90,35 +88,36 @@
     </style>
 </head>
 <body>
+
     <div class="login-container">
         <h2>Login</h2>
-        <form id="login-form" asp-controller="Lecturer" asp-action="LecturerLogin" method="post">
+        <form id="login-form" action="login" method="post">
             <input type="text" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <input type="submit" value="LecturerLogin">
+            <input type="submit" value="Login">
         </form>
-
         <div class="signup-link">
-            <a asp-area="" asp-controller="Lecturer" asp-action="LecturerSignUp">Sign Up</a>
+            <a asp-area="" asp-controller="Home" asp-action="SignUp">Sign Up</a>
         </div>
     </div>
 
-    <!-- Notification for login failure -->
+    <!-- Notification -->
     <div id="notification">
         Login failed. Please check your username and password.
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var loginResult = "@(ViewData["LoginResult"] ?? "0")";
+            var loginResult = "@ViewData["LoginResult"]";
             if (loginResult === "1") {
                 var notification = document.getElementById("notification");
                 notification.classList.add("show");
                 setTimeout(function() {
                     notification.classList.remove("show");
-                }, 3000);
+                }, 3000); // Hide after 3 seconds
             }
         });
     </script>
+
 </body>
 </html>

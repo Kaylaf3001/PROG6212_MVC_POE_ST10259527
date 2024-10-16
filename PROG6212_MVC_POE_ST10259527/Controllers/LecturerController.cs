@@ -40,54 +40,6 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //----------------------------------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------------------------------
-        //Allows the lecturer to login
-        //-----------------------------------------------------------------------------------------------------
-        public async Task<IActionResult> LecturerSignUp(UserProfileModel userProfile)
-        {
-            // Ensure the role is set as Lecturer
-            userProfile.Role = "Lecturer";
-
-            if (ModelState.IsValid)
-            {
-                await _tableServices.AddEntityAsync(userProfile);
-                return RedirectToAction("LecturerLogin");
-            }
-            return View(userProfile);
-        }
-        //-----------------------------------------------------------------------------------------------------
-
-        //-----------------------------------------------------------------------------------------------------
-        //Allows the lecturer to login
-        //-----------------------------------------------------------------------------------------------------
-        [HttpPost]
-        public async Task<IActionResult> LecturerLogin(LoginModel loginModel)
-        {
-
-            if (ModelState.IsValid)
-            {
-                var user = await _tableServices.GetUserByEmailAsync(loginModel.Email);
-                if (user != null && user.Password == loginModel.Password)
-                {
-                    if (user.Role == "Lecturer")
-                    {
-                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
-                        // Redirect to Lecturer's dashboard
-                        return RedirectToAction("StatusView");
-                    }
-                    else
-                    {
-                        // Return the same view with a notification
-                        ViewData["LoginResult"] = "1"; // 1 indicates failure
-                        return View(loginModel);
-                    }
-                }
-                ViewData["LoginResult"] = "1"; // 1 indicates failure
-            }
-            return View(loginModel);
-        }
-        //-----------------------------------------------------------------------------------------------------
-
-        //-----------------------------------------------------------------------------------------------------
         //Displays the status of the claims
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> StatusView()

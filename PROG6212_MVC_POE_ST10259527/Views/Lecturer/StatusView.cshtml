@@ -95,7 +95,7 @@
             <tr>
                 <th scope="row">@item.RowKey</th>
                 <td>@item.LecturerID</td>
-                <td>@item.TotalAmount</td>
+                <td>@item.CalculateTotalAmount()</td>
                 <td>
                     @if (item.Status == "Pending")
                     {

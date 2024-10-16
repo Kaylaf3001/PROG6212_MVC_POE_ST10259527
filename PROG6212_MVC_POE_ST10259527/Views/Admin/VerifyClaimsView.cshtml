@@ -31,7 +31,7 @@
                     <td>@item.LecturerID</td>
                     <td>@item.HoursWorked</td>
                     <td>@item.HourlyRate</td>
-                    <td>@item.TotalAmount</td>
+                    <td>@item.CalculateTotalAmount()</td>
                     <td>
                         <button class="btn btn-success btn-sm" onclick="approveClaim('@item.RowKey')">Approve</button>
                         <button class="btn btn-danger btn-sm" onclick="rejectClaim('@item.RowKey')">Reject</button>

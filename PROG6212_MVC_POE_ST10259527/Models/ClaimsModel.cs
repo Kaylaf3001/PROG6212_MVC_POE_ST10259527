@@ -18,12 +18,19 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public double HourlyRate { get; set; }
         public string Status { get; set; }
         public string? SupportingDocumentUrl { get; set; } 
-        public double? TotalAmount { get => (HoursWorked * HourlyRate); }
+       
 
         public ClaimsModel()
         {
             PartitionKey = "Claims";
             RowKey = Guid.NewGuid().ToString();
+        }
+
+        //Test  
+        public double CalculateTotalAmount()
+        {
+            totalAmount = HoursWorked * HourlyRate;
+            return totalAmount.Value;
         }
     }
 }
