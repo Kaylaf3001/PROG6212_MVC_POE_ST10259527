@@ -33,8 +33,8 @@
                     <td>@item.HourlyRate</td>
                     <td>@item.CalculateTotalAmount()</td>
                     <td>
-                        <button class="btn btn-success btn-sm" onclick="approveClaim('@item.RowKey')">Approve</button>
-                        <button class="btn btn-danger btn-sm" onclick="rejectClaim('@item.RowKey')">Reject</button>
+                        <button class="btn btn-success btn-sm" onclick="ApproveClaim('@item.RowKey')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="RejectClaim('@item.RowKey')">Reject</button>
                     </td>
                 </tr>
             }
@@ -43,7 +43,7 @@
 </div>
 
 <script>
-    function approveClaim(claimId) {
+    function ApproveClaim(claimId) {
         $.ajax({
             url: '@Url.Action("ApproveClaim", "Admin")',
             type: 'POST',
@@ -68,7 +68,7 @@
         });
     }
 
-    function rejectClaim(claimId) {
+    function RejectClaim(claimId) {
         $.ajax({
             url: '@Url.Action("RejectClaim", "Admin")',
             type: 'POST',

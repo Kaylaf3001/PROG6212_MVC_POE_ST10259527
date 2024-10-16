@@ -30,7 +30,6 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View();
         }
 
-        //-----------------------------------------------------------------------------------------------------
         public IActionResult Privacy()
         {
             return View();
@@ -46,17 +45,17 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         // Allows the user to login
         //-----------------------------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if (ModelState.IsValid)
             {
                 var users = await _tableServices.GetAllUsers();
-                var user = UserProfileModel.LoginUser(users, loginModel.Email, loginModel.Password);
+                var user = UserProfileModel.LoginUser(users, loginViewModel);
 
                 if (user == null)
                 {
                     ViewData["LoginResult"] = "1"; // 1 indicates failure
-                    return View(loginModel);
+                    return View(loginViewModel);
                 }
                 else
                 {
@@ -74,7 +73,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                     } 
                 }
             }
-            return View(loginModel);
+            return View(loginViewModel);
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -82,14 +81,16 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //This method allows a admin to create an account
         //-----------------------------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> SignUp(UserProfileModel userProfile)
+        public async Task<IActionResult> SignUp(SignUpViewModel signUpViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _tableServices.AddEntityAsync(userProfile);
+                var newUser = UserProfileModel.SignUpUser(signUpViewModel);
+
+                await _tableServices.AddEntityAsync(newUser);
                 return RedirectToAction("Login");
             }
-            return View(userProfile);
+            return View(signUpViewModel);
         }
         //-----------------------------------------------------------------------------------------------------
     }

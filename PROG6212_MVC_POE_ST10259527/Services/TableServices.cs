@@ -78,18 +78,20 @@ namespace PROG6212_MVC_POE_ST10259527.Services
         //-----------------------------------------------------------------------------------------------------
         // Update the status of a claim
         //-----------------------------------------------------------------------------------------------------
-        public async Task UpdateClaimStatus(string rowKey, string status)
+        public async Task UpdateClaimStatus(ClaimsModel claim)
         {
-            // Retrieve the claim by RowKey
-            var claim = _tableClaimsClient.Query<ClaimsModel>(c => c.RowKey == rowKey).FirstOrDefault();
-
             if (claim != null)
             {
-                claim.Status = status; // Update the status
                 await _tableClaimsClient.UpdateEntityAsync(claim, ETag.All, TableUpdateMode.Replace);
             }
         }
         //-----------------------------------------------------------------------------------------------------
+
+        public async Task<ClaimsModel> GetClaimById(string claimId)
+        {
+            var claim = await _tableClient.GetEntityAsync<ClaimsModel>("Claims", claimId);
+            return claim;
+        }
 
         //-----------------------------------------------------------------------------------------------------
         //Get all Users

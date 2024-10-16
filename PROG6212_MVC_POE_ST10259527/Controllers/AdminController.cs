@@ -39,8 +39,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> ApproveClaim(string claimId)
         {
-            // Get the claim by ID
-            await _tableClaimsServices.UpdateClaimStatus(claimId, "Approved");
+            var claim = await _tableClaimsServices.GetClaimById(claimId);
+
+            var approvedClaim = ClaimsModel.ApproveClaim(claim);
+
+            await _tableClaimsServices.UpdateClaimStatus(approvedClaim);
           
             return Json(new { success = true, message = $"Claim {claimId} approved successfully!" });
         }
@@ -52,8 +55,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> RejectClaim(string claimId)
         {
-            // Get the claim by ID
-            await _tableServices.UpdateClaimStatus(claimId, "Rejected");
+            var claim = await _tableServices.GetClaimById(claimId);
+
+            var rejectedClaim = ClaimsModel.RejectClaim(claim);
+            
+            await _tableServices.UpdateClaimStatus(rejectedClaim);
  
             return Json(new { success = true, message = $"Claim {claimId} rejected." });
         }
