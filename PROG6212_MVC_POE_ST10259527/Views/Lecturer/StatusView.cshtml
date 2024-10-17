@@ -125,7 +125,6 @@
     <thead>
         <tr>
             <th scope="col">Claims ID</th>
-            <th scope="col">Lecturer ID</th>
             <th scope="col">Total Amount</th>
             <th scope="col">Status</th>
             <th scope="col">Supporting Document</th>
@@ -136,7 +135,6 @@
         {
             <tr>
                 <th scope="row">@item.RowKey</th>
-                <td>@item.LecturerID</td>
                 <td>@item.CalculateTotalAmount()</td>
                 <td>
                     @if (item.Status == "Pending")
@@ -153,9 +151,9 @@
                     }
                 </td>
                 <td>
-                    @if (!string.IsNullOrEmpty(item.SupportingDocumentUrl))
+                    @if (!string.IsNullOrEmpty(item.SupportingDocumentName))
                     {
-                        <a href="@Url.Action("DownloadFile", "Lecturer", new { fileName = item.SupportingDocumentUrl })" class="btn btn-primary" target="_blank">Download</a>
+                        <a href="@Url.Action("DownloadFile", "Lecturer", new { fileName = item.SupportingDocumentName })" class="btn btn-primary" target="_blank">Download</a>
                     }
                     else
                     {

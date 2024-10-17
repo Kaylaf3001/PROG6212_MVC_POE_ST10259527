@@ -61,6 +61,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             if (SupportingDocument != null && SupportingDocument.Length > 0)
             {
                 // Upload the file to Azure File Share
+                claim.SupportingDocumentName = SupportingDocument.FileName;
                 var fileUrl = await _fileService.UploadFileAsync("lecturer-files",SupportingDocument.FileName, SupportingDocument.OpenReadStream());
                 claim.SupportingDocumentUrl = fileUrl; // Store the file URL in the claim
             }

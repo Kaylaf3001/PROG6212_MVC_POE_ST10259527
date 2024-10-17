@@ -13,10 +13,12 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public ETag ETag { get; set; }
 
         public string LecturerID { get; set; }
+        public string LecturerName { get; set; }
         public double HoursWorked { get; set; }
         public double HourlyRate { get; set; }
         public string Status { get; set; }
         public string? SupportingDocumentUrl { get; set; }
+        public string? SupportingDocumentName { get; set; }
 
         public ClaimsModel()
         {

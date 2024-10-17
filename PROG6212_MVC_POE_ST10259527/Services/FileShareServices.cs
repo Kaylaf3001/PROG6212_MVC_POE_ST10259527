@@ -18,6 +18,9 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             _shareServiceClient = new ShareServiceClient(connectionString);
         }
 
+        //--------------------------------------------------------------------------------------
+        //Uploads Files to file share in azure
+        //--------------------------------------------------------------------------------------
         public async Task<string> UploadFileAsync(string shareName, string fileName, Stream content)
         {
             var shareClient = _shareServiceClient.GetShareClient(shareName);
@@ -29,6 +32,10 @@ namespace PROG6212_MVC_POE_ST10259527.Services
 
             return fileClient.Uri.ToString();
         }
+        //--------------------------------------------------------------------------------------
+
+        //--------------------------------------------------------------------------------------
+        //
         public async Task<List<string>> ListFilesAsync(string shareName)
         {
             var shareClient = _shareServiceClient.GetShareClient(shareName);
@@ -46,13 +53,9 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             var shareClient = _shareServiceClient.GetShareClient(shareName);
             var directoryClient = shareClient.GetRootDirectoryClient();
             var fileClient = directoryClient.GetFileClient(fileName);
-
-            if (await fileClient.ExistsAsync())
-            {
-                var downloadResponse = await fileClient.DownloadAsync();
-                return downloadResponse.Value.Content;
-            }
-            return null;
+            
+            var downloadResponse = await fileClient.DownloadAsync();
+            return downloadResponse.Value.Content;
         }
 
         public async Task DeleteFileAsync(string shareName, string fileName)
