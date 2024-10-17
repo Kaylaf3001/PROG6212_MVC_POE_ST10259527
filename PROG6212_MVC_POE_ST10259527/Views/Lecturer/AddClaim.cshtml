@@ -51,7 +51,10 @@
 </div>
 
 <form asp-action="AddClaim" method="post" enctype="multipart/form-data">
-
+    <div>
+        <<label for="moduleCode" class="form-label">Module Code</label>
+        <input type="text" class="form-control" id="moduleCode" name="ModuleCode" placeholder="Enter the Module Code" required />
+    </div>
     <div class="form-group mb-3">
         <label for="hoursWorked" class="form-label">Hours Worked</label>
         <input type="number" class="form-control" id="hoursWorked" name="HoursWorked" min="0" placeholder="Enter the number of hours worked" required />
@@ -64,8 +67,8 @@
 
     <!-- Date Input Section -->
     <div class="form-group mb-3">
-        <label for="claimDate" class="form-label">Claim Date</label>
-        <input type="date" class="form-control" id="claimDate" name="ClaimDate" required />
+        <label for="date" class="form-label">Claim Date</label>
+        <input type="date" class="form-control" id="Date" name="Date" required />
     </div>
 
     <!-- Document Upload Section -->

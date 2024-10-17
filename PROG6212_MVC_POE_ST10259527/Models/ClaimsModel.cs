@@ -14,6 +14,13 @@ namespace PROG6212_MVC_POE_ST10259527.Models
 
         public string LecturerID { get; set; }
         public string LecturerName { get; set; }
+        public string ModuleCode { get; set; }
+        public DateTime Date
+        {
+            get => _date;
+            set => _date = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+        }
+        private DateTime _date;
         public double HoursWorked { get; set; }
         public double HourlyRate { get; set; }
         public string Status { get; set; }

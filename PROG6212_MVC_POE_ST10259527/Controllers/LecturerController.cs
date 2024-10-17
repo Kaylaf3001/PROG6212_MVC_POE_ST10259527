@@ -100,6 +100,10 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View("StatusView", claims);
         }
         //-----------------------------------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------------------------------
+        // Allows the lecturer to download a file
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> DownloadFile(string fileName)
         {
             var fileStream = await _fileService.DownloadFileAsync("lecturer-files", fileName);
@@ -110,6 +114,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return File(fileStream, "application/octet-stream", fileName);
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------
