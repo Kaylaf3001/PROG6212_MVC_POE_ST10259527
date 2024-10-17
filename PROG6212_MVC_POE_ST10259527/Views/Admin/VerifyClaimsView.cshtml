@@ -15,12 +15,13 @@
     <table class="table table-striped mt-4">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">Claim Id</th>
                 <th scope="col">Lecturer Name</th>
                 <th scope="col">Hours Worked</th>
                 <th scope="col">Hourly Rate</th>
                 <th scope="col">Total Amount</th>
                 <th scope="col">Actions</th>
+                <th scope="col">Documents</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,16 @@
                     <td>
                         <button class="btn btn-success btn-sm" onclick="ApproveClaim('@item.RowKey')">Approve</button>
                         <button class="btn btn-danger btn-sm" onclick="RejectClaim('@item.RowKey')">Reject</button>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.SupportingDocumentName))
+                        {
+                            <a href="@Url.Action("DownloadFile", "Lecturer", new { fileName = item.SupportingDocumentName })" class="btn btn-primary" target="_blank">Download</a>
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
                     </td>
                 </tr>
             }

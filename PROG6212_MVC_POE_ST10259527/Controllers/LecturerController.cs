@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
@@ -44,7 +45,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> StatusView()
         {
+            var lecturerID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
             var claims = await _tableServices.GetAllClaims();
+            claims = claims.Where(l => l.LecturerID == lecturerID).ToList();
             return View(claims);
         }
         //-----------------------------------------------------------------------------------------------------
@@ -57,6 +60,10 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             claim.Status = "Pending"; // Set the claim status to Pending
             claim.LecturerID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
+
+            var lecturer = await _tableServices.GetUserByIDAsync(claim.LecturerID);
+            claim.LecturerName = lecturer.FirstName;
+
 
             if (SupportingDocument != null && SupportingDocument.Length > 0)
             {

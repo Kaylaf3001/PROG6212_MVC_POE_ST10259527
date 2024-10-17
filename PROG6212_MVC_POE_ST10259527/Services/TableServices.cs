@@ -36,11 +36,11 @@ namespace PROG6212_MVC_POE_ST10259527.Services
         //-----------------------------------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------------------------------
-        // Get a user by email
+        // Get a user by lecturerID
         //-----------------------------------------------------------------------------------------------------
-        public async Task<UserProfileModel> GetUserByEmailAsync(string email)
+        public async Task<UserProfileModel> GetUserByIDAsync(string lecturerID)
         {
-            var filter = $"Email eq '{email}'"; // Ensure this is strongly typed
+            var filter = $"RowKey eq '{lecturerID}'"; // Ensure this is strongly typed
             var entities = _tableClient.Query<UserProfileModel>(filter);
 
             foreach (var entity in entities)
