@@ -120,6 +120,7 @@
 <a href="@Url.Action("ClearFilters")" class="btn btn-clear">Clear Filters</a>
 
 <!-- Claims status table -->
+<!-- Claims status table -->
 <table class="table table-striped mt-4">
     <thead>
         <tr>
@@ -127,6 +128,7 @@
             <th scope="col">Lecturer ID</th>
             <th scope="col">Total Amount</th>
             <th scope="col">Status</th>
+            <th scope="col">Supporting Document</th>
         </tr>
     </thead>
     <tbody>
@@ -148,6 +150,16 @@
                     else
                     {
                         <span class="badge badge-danger">@item.Status</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.SupportingDocumentUrl))
+                    {
+                        <a href="@Url.Action("DownloadFile", "Lecturer", new { fileName = item.SupportingDocumentUrl })" class="btn btn-primary" target="_blank">Download</a>
+                    }
+                    else
+                    {
+                        <span>No document</span>
                     }
                 </td>
             </tr>

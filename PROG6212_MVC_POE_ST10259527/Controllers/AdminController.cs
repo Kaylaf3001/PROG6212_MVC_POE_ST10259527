@@ -11,11 +11,13 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     {
         private readonly TableServices _tableServices;
         private readonly TableServices _tableClaimsServices;
-        
-        public AdminController(TableServices tableServices, TableServices tableClaimsServices)
+        private readonly FileService _fileService;
+
+        public AdminController(TableServices tableServices, TableServices tableClaimsServices, FileService fileService)
         {
             _tableServices = tableServices;
             _tableClaimsServices = tableClaimsServices;
+            _fileService = fileService;
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -46,7 +48,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             var approvedClaim = ClaimsModel.ApproveClaim(claim);
 
             await _tableClaimsServices.UpdateClaimStatus(approvedClaim);
-          
+
             return Json(new { success = true, message = $"Claim {claimId} approved successfully!" });
         }
         //-----------------------------------------------------------------------------------------------------
@@ -60,12 +62,24 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             var claim = await _tableServices.GetClaimById(claimId);
 
             var rejectedClaim = ClaimsModel.RejectClaim(claim);
-            
+
             await _tableServices.UpdateClaimStatus(rejectedClaim);
- 
+
             return Json(new { success = true, message = $"Claim {claimId} rejected." });
         }
         //-----------------------------------------------------------------------------------------------------
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            var fileStream = await _fileService.DownloadFileAsync("lecturerclaimsfiles", fileName);
+            if (fileStream == null)
+            {
+                return NotFound();
+            }
+
+            return File(fileStream, "application/octet-stream", fileName);
+        }
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------

@@ -61,7 +61,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             if (SupportingDocument != null && SupportingDocument.Length > 0)
             {
                 // Upload the file to Azure File Share
-                var fileUrl = await _fileService.UploadFileAsync(SupportingDocument.FileName, SupportingDocument.OpenReadStream());
+                var fileUrl = await _fileService.UploadFileAsync("lecturer-files",SupportingDocument.FileName, SupportingDocument.OpenReadStream());
                 claim.SupportingDocumentUrl = fileUrl; // Store the file URL in the claim
             }
 
@@ -92,6 +92,16 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View("StatusView", claims);
         }
         //-----------------------------------------------------------------------------------------------------
+        public async Task<IActionResult> DownloadFile(string fileName)
+        {
+            var fileStream = await _fileService.DownloadFileAsync("lecturer-files", fileName);
+            if (fileStream == null)
+            {
+                return NotFound();
+            }
+
+            return File(fileStream, "application/octet-stream", fileName);
+        }
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------

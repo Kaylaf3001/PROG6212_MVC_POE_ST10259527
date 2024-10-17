@@ -11,41 +11,59 @@ namespace PROG6212_MVC_POE_ST10259527.Services
     //-----------------------------------------------------------------------------------------------------
     public class FileService
     {
-        private readonly ShareClient _shareClient;
+        private readonly ShareServiceClient _shareServiceClient;
 
         public FileService(string connectionString)
         {
-            // Create a ShareClient to interact with Azure File Storage
-            _shareClient = new ShareClient(connectionString, "lecturerclaimsfiles");
-            _shareClient.CreateIfNotExists();
+            _shareServiceClient = new ShareServiceClient(connectionString);
         }
-        //-----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // Upload a file to the file share
-        //-----------------------------------------------------------------------------------------------------
-        public async Task<string> UploadFileAsync(string fileName, Stream fileStream)
+        public async Task<string> UploadFileAsync(string shareName, string fileName, Stream content)
         {
-            // Create a reference to a directory in the file share
-            var directoryClient = _shareClient.GetDirectoryClient("claims");
-
-            // Ensure the directory exists
-            await directoryClient.CreateIfNotExistsAsync();
-
-            // Get a reference to the file in the directory
+            var shareClient = _shareServiceClient.GetShareClient(shareName);
+            var directoryClient = shareClient.GetRootDirectoryClient();
+            await shareClient.CreateIfNotExistsAsync();
             var fileClient = directoryClient.GetFileClient(fileName);
+            await fileClient.CreateAsync(content.Length);
+            await fileClient.UploadAsync(content);
 
-            // Upload the file
-            await fileClient.CreateAsync(fileStream.Length);
-            await fileClient.UploadRangeAsync(
-                new HttpRange(0, fileStream.Length),
-                fileStream
-            );
-
-            // Return the URL of the uploaded file
             return fileClient.Uri.ToString();
         }
-        //-----------------------------------------------------------------------------------------------------
+        public async Task<List<string>> ListFilesAsync(string shareName)
+        {
+            var shareClient = _shareServiceClient.GetShareClient(shareName);
+            await shareClient.CreateIfNotExistsAsync();
+            var directoryClient = shareClient.GetRootDirectoryClient();
+            var files = new List<string>();
+            await foreach (var item in directoryClient.GetFilesAndDirectoriesAsync())
+            {
+                files.Add(item.Name);
+            }
+            return files;
+        }
+        public async Task<Stream> DownloadFileAsync(string shareName, string fileName)
+        {
+            var shareClient = _shareServiceClient.GetShareClient(shareName);
+            var directoryClient = shareClient.GetRootDirectoryClient();
+            var fileClient = directoryClient.GetFileClient(fileName);
+
+            if (await fileClient.ExistsAsync())
+            {
+                var downloadResponse = await fileClient.DownloadAsync();
+                return downloadResponse.Value.Content;
+            }
+            return null;
+        }
+
+        public async Task DeleteFileAsync(string shareName, string fileName)
+        {
+            var shareClient = _shareServiceClient.GetShareClient(shareName);
+            var directoryClient = shareClient.GetRootDirectoryClient();
+            var fileClient = directoryClient.GetFileClient(fileName);
+
+            await fileClient.DeleteIfExistsAsync();
+        }
     }
+
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------
