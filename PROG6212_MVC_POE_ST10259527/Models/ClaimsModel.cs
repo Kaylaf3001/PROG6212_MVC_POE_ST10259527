@@ -26,6 +26,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public string Status { get; set; }
         public string? SupportingDocumentUrl { get; set; }
         public string? SupportingDocumentName { get; set; }
+        public bool IsValid { get; set; } // Indicates if the claim meets the policy
 
         public ClaimsModel()
         {
@@ -112,6 +113,8 @@ namespace PROG6212_MVC_POE_ST10259527.Models
             return pendingClaims;
         }
         //-----------------------------------------------------------------------------------------------------
+
+        
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------

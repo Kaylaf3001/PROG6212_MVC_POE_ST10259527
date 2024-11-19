@@ -28,8 +28,13 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             var claims = await _tableServices.GetAllClaims();
 
-            // Only display the claims that are pending
             claims = claims.Where(claim => claim.Status != "Approved" && claim.Status != "Rejected").ToList();
+
+            // Validate each claim and update IsValid property
+            foreach (var claim in claims)
+            {
+                claim.IsValid = ValidateClaims(claim);
+            }
 
             return View(claims);
         }
@@ -44,6 +49,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             //TODO: First break points hit but not adding
             var claim = await _tableClaimsServices.GetClaimById(claimId);
+
+            if (!ValidateClaims(claim))
+            {
+                return Json(new { success = false, message = "Claim validation failed." });
+            }
 
             var approvedClaim = ClaimsModel.ApproveClaim(claim);
 
@@ -84,6 +94,25 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return File(fileStream, "application/octet-stream", fileName);
         }
         //-----------------------------------------------------------------------------------------------------
+        private bool ValidateClaims(ClaimsModel claim)
+        {
+            // Example validation logic
+            double hourlyRate = 100.0; // Replace with your policy value
+            double maxHours = 40.0;    // Replace with your policy value
+
+            if (claim.HoursWorked <= 0 || claim.HoursWorked > maxHours)
+            {
+                return false;
+            }
+
+            double calculatedAmount = claim.HoursWorked * hourlyRate;
+            if (calculatedAmount != claim.CalculateTotalAmount())
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------
