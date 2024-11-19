@@ -7,6 +7,11 @@
 <div class="container mt-5">
     <h1 class="mb-4">HR Dashboard</h1>
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
     <h2 class="mb-4">Reports</h2>
 
     <ul class="list-group">
@@ -14,7 +19,17 @@
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 @report
-                <a href="@Url.Action("DownloadReport", "HR", new { fileName = report })" class="btn btn-primary btn-sm">Download</a>
+                <div>
+                    <a href="@Url.Action("DownloadReport", "HR", new { fileName = report })" class="btn btn-primary btn-sm">Download</a>
+                    <form asp-action="PayReport" method="post" class="d-inline">
+                        <input type="hidden" name="fileName" value="@report" />
+                        <button type="submit" class="btn btn-success btn-sm">Pay</button>
+                    </form>
+                    <form asp-action="DeleteReport" method="post" class="d-inline">
+                        <input type="hidden" name="fileName" value="@report" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
             </li>
         }
     </ul>

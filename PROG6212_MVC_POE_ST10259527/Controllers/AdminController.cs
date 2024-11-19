@@ -47,20 +47,19 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> ApproveClaim(string claimId)
         {
-
-            //TODO: First break points hit but not adding
             var claim = await _tableClaimsServices.GetClaimById(claimId);
 
             if (!ValidateClaims(claim))
             {
-                return Json(new { success = false, message = "Claim validation failed." });
+                TempData["ErrorMessage"] = "Claim validation failed.";
+                return RedirectToAction("VerifyClaimsView");
             }
 
             var approvedClaim = ClaimsModel.ApproveClaim(claim);
-
             await _tableClaimsServices.UpdateClaimStatus(approvedClaim);
 
-            return Json(new { success = true, message = $"Claim {claimId} approved successfully!" });
+            TempData["SuccessMessage"] = $"Claim {claimId} approved successfully!";
+            return RedirectToAction("VerifyClaimsView");
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -71,12 +70,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         public async Task<IActionResult> RejectClaim(string claimId)
         {
             var claim = await _tableServices.GetClaimById(claimId);
-
             var rejectedClaim = ClaimsModel.RejectClaim(claim);
-
             await _tableServices.UpdateClaimStatus(rejectedClaim);
 
-            return Json(new { success = true, message = $"Claim {claimId} rejected." });
+            TempData["SuccessMessage"] = $"Claim {claimId} rejected.";
+            return RedirectToAction("VerifyClaimsView");
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -98,7 +96,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         private bool ValidateClaims(ClaimsModel claim)
         {
             // Example validation logic
-            double hourlyRate = 100.0; // Replace with your policy value
+             // Replace with your policy value
             double maxHours = 40.0;    // Replace with your policy value
 
             if (claim.HoursWorked <= 0 || claim.HoursWorked > maxHours)
@@ -106,7 +104,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 return false;
             }
 
-            double calculatedAmount = claim.HoursWorked * hourlyRate;
+            double calculatedAmount = claim.HoursWorked * claim.HourlyRate;
             if (calculatedAmount != claim.CalculateTotalAmount())
             {
                 return false;
@@ -119,14 +117,15 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         // Generate and send report to HR
         //-----------------------------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> SendReportToHR()
+        public async Task<IActionResult> GenerateReport()
         {
             var claims = await _tableServices.GetAllClaims();
             var approvedClaims = claims.Where(claim => claim.Status == "Approved").ToList();
 
             if (!approvedClaims.Any())
             {
-                return Json(new { success = false, message = "No approved claims to report." });
+                TempData["ErrorMessage"] = "No approved claims to report.";
+                return RedirectToAction("VerifyClaimsView");
             }
 
             var reportContent = GenerateReportContent(approvedClaims);
@@ -137,9 +136,14 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 await _fileService.UploadFileAsync("hrreports", reportFileName, stream);
             }
 
-            return Json(new { success = true, message = "Report sent to HR successfully!" });
+            TempData["SuccessMessage"] = "Report generated and sent to HR successfully!";
+            return RedirectToAction("VerifyClaimsView");
         }
+        //----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Generate the report content
+        //-----------------------------------------------------------------------------------------------------
         private string GenerateReportContent(List<ClaimsModel> approvedClaims)
         {
             var sb = new StringBuilder();
@@ -157,5 +161,6 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return sb.ToString();
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }

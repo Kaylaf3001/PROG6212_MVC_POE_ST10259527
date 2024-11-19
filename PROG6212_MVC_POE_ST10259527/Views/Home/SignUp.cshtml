@@ -31,7 +31,8 @@
             }
 
             .SignUp-container input[type="text"],
-            .SignUp-container input[type="password"] {
+            .SignUp-container input[type="password"],
+            .SignUp-container select {
                 width: 100%;
                 padding: 10px;
                 margin-top: 10px;
@@ -77,9 +78,12 @@
             <input asp-for="LastName" placeholder="Surname" required>
             <input asp-for="Email" placeholder="Email" required>
             <input asp-for="Password" placeholder="Password" required>
-            <label>
-                <input asp-for="Role" type="checkbox"> Are you an Admin?
-            </label>
+            <select asp-for="Role" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="Admin">Admin</option>
+                <option value="Lecturer">Lecturer</option>
+                <option value="HR">HR</option>
+            </select>
             <input type="submit" value="Sign Up">
         </form>
         <div class="login-link">
