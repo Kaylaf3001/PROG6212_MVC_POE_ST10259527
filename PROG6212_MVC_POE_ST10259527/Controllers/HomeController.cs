@@ -59,18 +59,23 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 }
                 else
                 {
-                    if (user.IsAdmin)
+                    _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
+                    switch (user.Role)
                     {
-                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
-                        // Redirect to Admin's dashboard
-                        return RedirectToAction("VerifyClaimsView", "Admin");
+                        case "Admin":
+                            // Redirect to Admin's dashboard
+                            return RedirectToAction("VerifyClaimsView", "Admin");
+                        case "Lecturer":
+                            // Redirect to Lecturer's dashboard
+                            return RedirectToAction("StatusView", "Lecturer");
+                        case "HR":
+                            // Redirect to HR's dashboard
+                            return RedirectToAction("HRDashboard", "HR");
+                        default:
+                            // Handle unknown role
+                            ViewData["LoginResult"] = "1"; // 1 indicates failure
+                            return View(loginViewModel);
                     }
-                    else
-                    {
-                        _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
-                        // Redirect to Lecturer's dashboard
-                        return RedirectToAction("StatusView", "Lecturer");
-                    } 
                 }
             }
             return View(loginViewModel);
@@ -78,7 +83,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------------------------------
-        //This method allows a admin to create an account
+        // This method allows an admin to create an account
         //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel signUpViewModel)

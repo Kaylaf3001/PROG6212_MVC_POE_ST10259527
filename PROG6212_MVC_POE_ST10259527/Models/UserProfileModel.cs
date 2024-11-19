@@ -19,7 +19,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public string? LastName { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public bool IsAdmin { get; set; } = false;
+        public string Role { get; set; } // Changed from bool IsAdmin to string Role
 
         // Parameterless constructor
         public UserProfileModel()
@@ -29,7 +29,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         }
 
         // Constructor with parameters
-        public UserProfileModel(string firstName, string lastName, string email, string password, bool isAdmin)
+        public UserProfileModel(string firstName, string lastName, string email, string password, string role)
         {
             PartitionKey = "User";
             RowKey = Guid.NewGuid().ToString();
@@ -37,7 +37,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
             LastName = lastName;
             Email = email;
             Password = password;
-            IsAdmin = isAdmin;
+            Role = role;
         }
 
         //-----------------------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         //-----------------------------------------------------------------------------------------------------
         public static UserProfileModel SignUpUser(SignUpViewModel tryNewUser)
         {
-            var newUser = new UserProfileModel(tryNewUser.FirstName, tryNewUser.LastName, tryNewUser.Email, tryNewUser.Password, tryNewUser.IsAdmin);
+            var newUser = new UserProfileModel(tryNewUser.FirstName, tryNewUser.LastName, tryNewUser.Email, tryNewUser.Password, tryNewUser.Role);
             return newUser;
         }
         //-----------------------------------------------------------------------------------------------------
