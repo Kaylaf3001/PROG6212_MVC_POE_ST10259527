@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
+using System.Text;
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
@@ -113,6 +114,48 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return true;
         }
+
+        //-----------------------------------------------------------------------------------------------------
+        // Generate and send report to HR
+        //-----------------------------------------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> SendReportToHR()
+        {
+            var claims = await _tableServices.GetAllClaims();
+            var approvedClaims = claims.Where(claim => claim.Status == "Approved").ToList();
+
+            if (!approvedClaims.Any())
+            {
+                return Json(new { success = false, message = "No approved claims to report." });
+            }
+
+            var reportContent = GenerateReportContent(approvedClaims);
+            var reportFileName = $"LecturerPaymentReport_{DateTime.Now:yyyyMMddHHmmss}.txt";
+
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(reportContent)))
+            {
+                await _fileService.UploadFileAsync("hrreports", reportFileName, stream);
+            }
+
+            return Json(new { success = true, message = "Report sent to HR successfully!" });
+        }
+
+        private string GenerateReportContent(List<ClaimsModel> approvedClaims)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Lecturer Payment Report");
+            sb.AppendLine("=====================================");
+            sb.AppendLine("Lecturer Name\tModule Code\tTotal Amount");
+
+            foreach (var claim in approvedClaims)
+            {
+                sb.AppendLine($"{claim.LecturerName}\t{claim.ModuleCode}\t{claim.CalculateTotalAmount()}");
+            }
+
+            sb.AppendLine("=====================================");
+            sb.AppendLine($"Total Amount to be Paid: {approvedClaims.Sum(c => c.CalculateTotalAmount())}");
+
+            return sb.ToString();
+        }
     }
 }
-//-----------------------------------------------End-Of-File----------------------------------------------------
