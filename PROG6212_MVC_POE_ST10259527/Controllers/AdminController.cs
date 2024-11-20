@@ -10,14 +10,12 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     //-----------------------------------------------------------------------------------------------------
     public class AdminController : Controller
     {
-        private readonly TableServices _tableServices;
-        private readonly TableServices _tableClaimsServices;
+        private readonly SqlService _sqlService;
         private readonly FileService _fileService;
 
-        public AdminController(TableServices tableServices, TableServices tableClaimsServices, FileService fileService)
+        public AdminController(FileService fileService, SqlService sqlService)
         {
-            _tableServices = tableServices;
-            _tableClaimsServices = tableClaimsServices;
+            _sqlService = sqlService;
             _fileService = fileService;
         }
         //-----------------------------------------------------------------------------------------------------
@@ -27,7 +25,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> VerifyClaimsView()
         {
-            var claims = await _tableServices.GetAllClaims();
+            var claims = await _sqlService.GetAllClaimsAsync();
 
             claims = claims.Where(claim => claim.Status != "Approved" && claim.Status != "Rejected").ToList();
 
@@ -45,9 +43,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         // This method is called when the admin wants to approve a claim
         //-----------------------------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> ApproveClaim(string claimId)
+        public async Task<IActionResult> ApproveClaim(int claimId)
         {
-            var claim = await _tableClaimsServices.GetClaimById(claimId);
+            var claim = await _sqlService.GetClaimByIdAsync(claimId);
 
             if (!ValidateClaims(claim))
             {
@@ -56,7 +54,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
 
             var approvedClaim = ClaimsModel.ApproveClaim(claim);
-            await _tableClaimsServices.UpdateClaimStatus(approvedClaim);
+            await _sqlService.UpdateClaimStatusAsync(approvedClaim);
 
             TempData["SuccessMessage"] = $"Claim {claimId} approved successfully!";
             return RedirectToAction("VerifyClaimsView");
@@ -67,11 +65,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         // This method is called when the admin wants to reject a claim
         //-----------------------------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> RejectClaim(string claimId)
+        public async Task<IActionResult> RejectClaim(int claimId)
         {
-            var claim = await _tableServices.GetClaimById(claimId);
+            var claim = await _sqlService.GetClaimByIdAsync(claimId);
             var rejectedClaim = ClaimsModel.RejectClaim(claim);
-            await _tableServices.UpdateClaimStatus(rejectedClaim);
+            await _sqlService.UpdateClaimStatusAsync(rejectedClaim);
 
             TempData["SuccessMessage"] = $"Claim {claimId} rejected.";
             return RedirectToAction("VerifyClaimsView");
@@ -122,7 +120,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> GenerateReport()
         {
-            var claims = await _tableServices.GetAllClaims();
+            var claims = await _sqlService.GetAllClaimsAsync();
             var approvedClaims = claims.Where(claim => claim.Status == "Approved" && !claim.IsPaid).ToList();
 
             if (!approvedClaims.Any())

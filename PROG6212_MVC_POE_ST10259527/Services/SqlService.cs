@@ -15,20 +15,27 @@ namespace PROG6212_MVC_POE_ST10259527.Services
         // Add a user profile
         public async Task AddUserProfileAsync(UserProfileModel profile)
         {
-            _context.UserProfiles.Add(profile);
+            _context.UserProfile.Add(profile);
             await _context.SaveChangesAsync();
         }
 
         // Get a user by lecturerID
-        public async Task<UserProfileModel> GetUserByIDAsync(string lecturerID)
+        public async Task<UserProfileModel> GetUserByIDAsync(int lecturerID)
         {
-            return await _context.UserProfiles.FirstOrDefaultAsync(u => u.RowKey == lecturerID);
+            return await _context.UserProfile.FirstOrDefaultAsync(u => u.userID == lecturerID);
         }
 
         // Get all users
         public async Task<List<UserProfileModel>> GetAllUsersAsync()
         {
-            return await _context.UserProfiles.ToListAsync();
+            return await _context.UserProfile.ToListAsync();
+        }
+
+        // Update a user profile
+        public async Task UpdateUserProfileAsync(UserProfileModel profile)
+        {
+            _context.UserProfile.Update(profile);
+            await _context.SaveChangesAsync();
         }
 
         // Add a claim
@@ -52,9 +59,17 @@ namespace PROG6212_MVC_POE_ST10259527.Services
         }
 
         // Get a claim by ID
-        public async Task<ClaimsModel> GetClaimByIdAsync(string claimId)
+        public async Task<ClaimsModel> GetClaimByIdAsync(int claimId)
         {
-            return await _context.Claims.FirstOrDefaultAsync(c => c.RowKey == claimId);
+            return await _context.Claims.FirstOrDefaultAsync(c => c.ClaimID == claimId);
+        }
+
+        // Example of using raw SQL
+        public async Task<List<UserProfileModel>> GetUsersByRoleAsync(string role)
+        {
+            return await _context.UserProfile
+                .FromSqlRaw("SELECT * FROM UserProfiles WHERE Role = {0}", role)
+                .ToListAsync();
         }
     }
 }

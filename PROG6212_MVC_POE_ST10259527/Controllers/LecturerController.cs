@@ -13,16 +13,14 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     public class LecturerController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly TableServices _tableServices;
-        private readonly TableServices _tableClaimsServices;
+        private readonly SqlService _sqlService;
         private readonly FileService _fileService;
 
-        public LecturerController(TableServices tableServices, TableServices tableClaimsServices, FileService fileService, IHttpContextAccessor httpContextAccessor)
+        public LecturerController(FileService fileService, IHttpContextAccessor httpContextAccessor, SqlService sqlService)
         {
-            _tableServices = tableServices;
-            _tableClaimsServices = tableClaimsServices;
             _fileService = fileService;
             _httpContextAccessor = httpContextAccessor;
+            _sqlService = sqlService;
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -45,9 +43,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> StatusView()
         {
-            var lecturerID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
-            var claims = await _tableServices.GetAllClaims();
-            claims = claims.Where(l => l.LecturerID == lecturerID).ToList();
+            int lecturerID = _httpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
+            var claims = await _sqlService.GetAllClaimsAsync();
+            claims = claims.Where(l => l.userID == lecturerID).ToList();
             return View(claims);
         }
         //-----------------------------------------------------------------------------------------------------
@@ -60,9 +58,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             claim.Status = "Pending"; // Set the claim status to Pending
             claim.IsPaid = false; // Set the claim to unpaid
-            claim.LecturerID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
+            claim.userID = _httpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
 
-            var lecturer = await _tableServices.GetUserByIDAsync(claim.LecturerID);
+            var lecturer = await _sqlService.GetUserByIDAsync(claim.userID);
             claim.LecturerName = lecturer.FirstName;
 
 
@@ -71,11 +69,10 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 // Upload the file to Azure File Share
                 claim.SupportingDocumentName = SupportingDocument.FileName;
                 var fileUrl = await _fileService.UploadFileAsync("lecturer-files",SupportingDocument.FileName, SupportingDocument.OpenReadStream());
-                claim.SupportingDocumentUrl = fileUrl; // Store the file URL in the claim
             }
 
             // Add the claim to the table storage
-            await _tableClaimsServices.AddClaim(claim);
+            await _sqlService.AddClaimAsync(claim);
 
             return RedirectToAction("StatusView");
         }
@@ -86,7 +83,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> FilterByStatus(string status)
         {
-            var claims = await _tableServices.GetAllClaims();
+            var claims = await _sqlService.GetAllClaimsAsync();
             var filteredClaims = claims.Where(c => c.Status == status).ToList();
             return View("StatusView", filteredClaims);
         }
@@ -97,7 +94,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> ClearFilters()
         {
-            var claims = await _tableServices.GetAllClaims();
+            var claims = await _sqlService.GetAllClaimsAsync();
             return View("StatusView", claims);
         }
         //-----------------------------------------------------------------------------------------------------

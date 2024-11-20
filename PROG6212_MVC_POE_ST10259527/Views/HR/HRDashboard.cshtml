@@ -5,34 +5,63 @@
 }
 
 <div class="container mt-5">
-    <h1 class="mb-4">HR Dashboard</h1>
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4 text-center text-primary">HR Dashboard</h1>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-    }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success text-center">@TempData["SuccessMessage"]</div>
+            }
 
-    <h2 class="mb-4">Reports</h2>
-
-    <ul class="list-group" id="report-list">
-        @foreach (var report in Model)
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center" id="report-@report">
-                @report
-                <div>
-                    <a href="@Url.Action("DownloadReport", "HR", new { fileName = report })" class="btn btn-primary btn-sm">Download</a>
-                    <form asp-action="PayReport" method="post" class="d-inline" onsubmit="removeReport('@report')">
-                        <input type="hidden" name="fileName" value="@report" />
-                        <button type="submit" class="btn btn-success btn-sm">Pay</button>
-                    </form>
-                    <form asp-action="DeleteReport" method="post" class="d-inline" onsubmit="removeReport('@report')">
-                        <input type="hidden" name="fileName" value="@report" />
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Reports</h2>
                 </div>
-            </li>
-        }
-    </ul>
+                <div class="card-body">
+                    <ul class="list-group" id="report-list">
+                        @foreach (var report in Model)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center" id="report-@report">
+                                <span>@report</span>
+                                <div>
+                                    <a href="@Url.Action("DownloadReport", "HR", new { fileName = report })" class="btn btn-primary btn-sm me-2">Download</a>
+                                    <form asp-action="PayReport" method="post" class="d-inline" onsubmit="removeReport('@report')">
+                                        <input type="hidden" name="fileName" value="@report" />
+                                        <button type="submit" class="btn btn-success btn-sm me-2">Pay</button>
+                                    </form>
+                                    <form asp-action="DeleteReport" method="post" class="d-inline" onsubmit="removeReport('@report')">
+                                        <input type="hidden" name="fileName" value="@report" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Lecturers</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @if (ViewBag.Lecturers != null)
+                        {
+                            @foreach (var lecturer in ViewBag.Lecturers)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@lecturer.FirstName @lecturer.LastName</span>
+                                    <a href="@Url.Action("EditLecturer", "HR", new { id = lecturer.userID })" class="btn btn-warning btn-sm">Edit</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>

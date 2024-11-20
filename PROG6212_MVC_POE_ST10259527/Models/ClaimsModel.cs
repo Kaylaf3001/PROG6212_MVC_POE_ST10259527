@@ -1,18 +1,15 @@
 ﻿using Azure.Data.Tables;
 using Azure;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace PROG6212_MVC_POE_ST10259527.Models
 {
-    public class ClaimsModel : ITableEntity
+    public class ClaimsModel 
     {
-        private double? totalAmount;
-
-        public string PartitionKey { get; set; }
-        public string RowKey { get; set; }
-        public DateTimeOffset? Timestamp { get; set; }
-        public ETag ETag { get; set; }
-
-        public string LecturerID { get; set; }
+        
+        public int ClaimID { get; set; }
+        public int userID { get; set; }
         public string LecturerName { get; set; }
         public string ModuleCode { get; set; }
         public DateTime Date
@@ -24,15 +21,14 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public double HoursWorked { get; set; }
         public double HourlyRate { get; set; }
         public string Status { get; set; }
-        public string? SupportingDocumentUrl { get; set; }
         public string? SupportingDocumentName { get; set; }
         public bool IsValid { get; set; } // Indicates if the claim meets the policy
         public bool IsPaid { get; set; } // Indicates if the claim has been paid
+        private double? totalAmount;
 
         public ClaimsModel()
         {
-            PartitionKey = "Claims";
-            RowKey = Guid.NewGuid().ToString();
+            
         }
 
         //-----------------------------------------------------------------------------------------------------

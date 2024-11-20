@@ -9,7 +9,18 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         {
         }
 
-        public DbSet<UserProfileModel> UserProfiles { get; set; }
+        public DbSet<UserProfileModel> UserProfile { get; set; }
         public DbSet<ClaimsModel> Claims { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserProfileModel>()
+                .HasKey(u => u.userID);
+
+            modelBuilder.Entity<ClaimsModel>()
+                .HasKey(c => c.ClaimID);
+        }
     }
 }

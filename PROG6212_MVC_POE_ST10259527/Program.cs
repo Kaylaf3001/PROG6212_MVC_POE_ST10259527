@@ -23,7 +23,6 @@ namespace PROG6212_MVC_POE_ST10259527
             builder.Services.AddScoped<SqlService>();
 
             // Register your custom services
-            builder.Services.AddSingleton<TableServices>();
             builder.Services.AddSingleton(new FileService(connectionString));
 
             builder.Services.AddHttpContextAccessor();

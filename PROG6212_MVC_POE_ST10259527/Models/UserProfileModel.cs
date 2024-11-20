@@ -3,18 +3,15 @@ using Azure.Data.Tables;
 using Microsoft.AspNetCore.Mvc;
 using PROG6212_MVC_POE_ST10259527.ViewModels;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace PROG6212_MVC_POE_ST10259527.Models
 {
-    public class UserProfileModel : ITableEntity
+    public class UserProfileModel 
     {
-        public string PartitionKey { get; set; }
-        public string RowKey { get; set; }
-        public DateTimeOffset? Timestamp { get; set; }
-        public ETag ETag { get; set; }
-
         // Custom properties
+        public int userID { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }
@@ -23,16 +20,12 @@ namespace PROG6212_MVC_POE_ST10259527.Models
 
         // Parameterless constructor
         public UserProfileModel()
-        {
-            PartitionKey = "User";
-            RowKey = Guid.NewGuid().ToString();
+        {  
         }
 
         // Constructor with parameters
         public UserProfileModel(string firstName, string lastName, string email, string password, string role)
         {
-            PartitionKey = "User";
-            RowKey = Guid.NewGuid().ToString();
             FirstName = firstName;
             LastName = lastName;
             Email = email;

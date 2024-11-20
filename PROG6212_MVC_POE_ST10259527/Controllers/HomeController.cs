@@ -10,12 +10,12 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     //-----------------------------------------------------------------------------------------------------
     public class HomeController : Controller
     {
-        private readonly TableServices _tableServices;
+        private readonly SqlService _sqlService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HomeController(TableServices tableServices, IHttpContextAccessor httpContextAccessor)
+        public HomeController(SqlService sqlService, IHttpContextAccessor httpContextAccessor)
         {
-            _tableServices = tableServices;
+            _sqlService = sqlService;
             _httpContextAccessor = httpContextAccessor;
         }
         //-----------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             if (ModelState.IsValid)
             {
-                var users = await _tableServices.GetAllUsers();
+                var users = await _sqlService.GetAllUsersAsync();
                 var user = UserProfileModel.LoginUser(users, loginViewModel);
 
                 if (user == null)
@@ -59,7 +59,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 }
                 else
                 {
-                    _httpContextAccessor.HttpContext.Session.SetString("UserID", user.RowKey);
+                    _httpContextAccessor.HttpContext.Session.SetInt32("UserID", user.userID);
                     switch (user.Role)
                     {
                         case "Admin":
@@ -92,7 +92,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             {
                 var newUser = UserProfileModel.SignUpUser(signUpViewModel);
 
-                await _tableServices.AddEntityAsync(newUser);
+                await _sqlService.AddUserProfileAsync(newUser);
                 return RedirectToAction("Login");
             }
             return View(signUpViewModel);
