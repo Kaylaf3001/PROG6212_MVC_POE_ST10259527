@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
 
 namespace PROG6212_MVC_POE_ST10259527
@@ -13,6 +15,12 @@ namespace PROG6212_MVC_POE_ST10259527
 
             var connectionString = builder.Configuration["AzureStorage:ConnectionString"];
 
+            // Configure DbContext
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Register SqlService
+            builder.Services.AddScoped<SqlService>();
 
             // Register your custom services
             builder.Services.AddSingleton<TableServices>();

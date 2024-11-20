@@ -93,11 +93,13 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return File(fileStream, "application/octet-stream", fileName);
         }
         //-----------------------------------------------------------------------------------------------------
+        //Validate and policy check for the claims
+        //-----------------------------------------------------------------------------------------------------
         private bool ValidateClaims(ClaimsModel claim)
         {
-            // Example validation logic
-             // Replace with your policy value
-            double maxHours = 40.0;    // Replace with your policy value
+            // Replace with your policy value
+            // Daily hours worked should not exceed 8 hours
+            double maxHours = 8;  
 
             if (claim.HoursWorked <= 0 || claim.HoursWorked > maxHours)
             {
@@ -112,6 +114,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return true;
         }
+        //-----------------------------------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------------------------------
         // Generate and send report to HR
@@ -120,7 +123,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         public async Task<IActionResult> GenerateReport()
         {
             var claims = await _tableServices.GetAllClaims();
-            var approvedClaims = claims.Where(claim => claim.Status == "Approved").ToList();
+            var approvedClaims = claims.Where(claim => claim.Status == "Approved" && !claim.IsPaid).ToList();
 
             if (!approvedClaims.Any())
             {

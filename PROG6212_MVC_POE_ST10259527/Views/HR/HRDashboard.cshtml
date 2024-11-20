@@ -14,18 +14,18 @@
 
     <h2 class="mb-4">Reports</h2>
 
-    <ul class="list-group">
+    <ul class="list-group" id="report-list">
         @foreach (var report in Model)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex justify-content-between align-items-center" id="report-@report">
                 @report
                 <div>
                     <a href="@Url.Action("DownloadReport", "HR", new { fileName = report })" class="btn btn-primary btn-sm">Download</a>
-                    <form asp-action="PayReport" method="post" class="d-inline">
+                    <form asp-action="PayReport" method="post" class="d-inline" onsubmit="removeReport('@report')">
                         <input type="hidden" name="fileName" value="@report" />
                         <button type="submit" class="btn btn-success btn-sm">Pay</button>
                     </form>
-                    <form asp-action="DeleteReport" method="post" class="d-inline">
+                    <form asp-action="DeleteReport" method="post" class="d-inline" onsubmit="removeReport('@report')">
                         <input type="hidden" name="fileName" value="@report" />
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
@@ -34,3 +34,9 @@
         }
     </ul>
 </div>
+
+<script>
+    function removeReport(report) {
+        document.getElementById('report-' + report).remove();
+    }
+</script>

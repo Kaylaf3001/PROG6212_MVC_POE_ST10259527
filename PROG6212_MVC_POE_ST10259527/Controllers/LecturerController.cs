@@ -59,6 +59,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         public async Task<IActionResult> AddClaim(ClaimsModel claim, IFormFile SupportingDocument)
         {
             claim.Status = "Pending"; // Set the claim status to Pending
+            claim.IsPaid = false; // Set the claim to unpaid
             claim.LecturerID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
 
             var lecturer = await _tableServices.GetUserByIDAsync(claim.LecturerID);

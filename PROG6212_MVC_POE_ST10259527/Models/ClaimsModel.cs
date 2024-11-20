@@ -27,6 +27,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public string? SupportingDocumentUrl { get; set; }
         public string? SupportingDocumentName { get; set; }
         public bool IsValid { get; set; } // Indicates if the claim meets the policy
+        public bool IsPaid { get; set; } // Indicates if the claim has been paid
 
         public ClaimsModel()
         {
@@ -113,8 +114,17 @@ namespace PROG6212_MVC_POE_ST10259527.Models
             return pendingClaims;
         }
         //-----------------------------------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------
+        // Mark the claim as paid
+        //-----------------------------------------------------------------------------------------------------
+        public static ClaimsModel MarkAsPaid(ClaimsModel claim)
+        {
+            claim.IsPaid = true;
+            return claim;
+        }
+        //-----------------------------------------------------------------------------------------------------
 
-        
+
     }
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------
