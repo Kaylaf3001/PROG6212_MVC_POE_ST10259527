@@ -24,13 +24,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        @if (User.IsInRole("HR")) // Assuming you have a way to check if the user is HR
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="HR" asp-action="HRDashboard">HR Dashboard</a>
-                            </li>
-                        }
+                        </li>  
                     </ul>
                 </div>
             </div>

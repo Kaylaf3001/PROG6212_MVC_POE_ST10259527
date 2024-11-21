@@ -1,6 +1,53 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Claim Policies";
 }
-<h1>@ViewData["Title"]</h1>
+<h1 class="page-title">@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="policy-container">
+    <h2 class="policy-header">Claim Policies</h2>
+    <ol class="policy-list">
+        <li>Daily hours worked should not exceed 8 hours.</li>
+        <li>Claims must be submitted within 30 days of the work being performed.</li>
+        <li>Supporting documents must be provided for all claims.</li>
+        <li>Claims will be reviewed and approved by the admin before payment.</li>
+        <li>Any discrepancies in the claim amount will result in rejection of the claim.</li>
+    </ol>
+</div>
+
+<style>
+    .page-title {
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .policy-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .policy-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #444;
+    }
+
+    .policy-list {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #555;
+        padding-left: 20px;
+    }
+
+    .policy-list li {
+        margin-bottom: 10px;
+    }
+</style>
