@@ -37,7 +37,6 @@
                     <th style="min-width: 130px;">Date</th>
                     <th style="min-width: 150px;">Total Amount</th>
                     <th style="min-width: 100px;">Status</th>
-                    <th style="min-width: 150px;">Policy Check</th>
                     <th style="min-width: 200px;">Actions</th>
                 </tr>
             </thead>
@@ -84,12 +83,7 @@
 </div>
 
 <script>
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-
+   
     function ApproveClaim(claimId) {
         $.ajax({
             url: '@Url.Action("ApproveClaim", "Admin")',
