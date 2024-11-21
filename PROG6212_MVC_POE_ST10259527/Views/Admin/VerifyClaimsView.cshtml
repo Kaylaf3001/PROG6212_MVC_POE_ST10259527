@@ -9,9 +9,79 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Verify Claims</h1>
+<style>
+    .table-container {
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
 
+    .table-header {
+        background-color: #007bff;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .table-body {
+        padding: 20px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+            text-align: left;
+        }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 4px;
+        color: #fff;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    .alert {
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 4px;
+        text-align: center;
+    }
+</style>
+<div>
+    <h1>Verify Claims</h1>
+</div>
+<div>
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -21,70 +91,70 @@
         <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
     }
 
-    <form asp-action="GenerateReport" method="post">
-        <button type="submit" class="btn btn-primary mb-4">Generate Report</button>
-    </form>
+<div class="container mt-5">
+    <div class="table-container">
 
-    <!-- Table container for horizontal scrolling -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th style="min-width: 120px;">Module Code</th>
-                    <th style="min-width: 150px;">Lecturer Name</th>
-                    <th style="min-width: 100px;">Hours Worked</th>
-                    <th style="min-width: 100px;">Hourly Rate</th>
-                    <th style="min-width: 130px;">Date</th>
-                    <th style="min-width: 150px;">Total Amount</th>
-                    <th style="min-width: 100px;">Status</th>
-                    <th style="min-width: 120px;">Policy Check</th>
-                    <th style="min-width: 200px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var claim in Model)
-                {
-                    <tr data-claim-id="@claim.ClaimID">
-                        <td>@claim.ModuleCode</td>
-                        <td>@claim.LecturerName</td>
-                        <td>@claim.HoursWorked</td>
-                        <td>@claim.HourlyRate</td>
-                        <td>@claim.Date.ToString("yyyy-MM-dd")</td>
-                        <td>@claim.CalculateTotalAmount()</td>
-                        <td>@claim.Status</td>
-                        <td>
-                            @if (!claim.IsValidClaim())
-                            {
-                                <span class="text-warning" data-bs-toggle="tooltip" title="Policy validation failed">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="text-success">Valid</span>
-                            }
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-evenly">
-                                <form asp-action="ApproveClaim" method="post" class="me-2">
-                                    <input type="hidden" name="claimId" value="@claim.ClaimID" />
-                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                                </form>
-                                <form asp-action="RejectClaim" method="post">
-                                    <input type="hidden" name="claimId" value="@claim.ClaimID" />
-                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            <!-- Table container for horizontal scrolling -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="min-width: 120px;">Module Code</th>
+                            <th style="min-width: 150px;">Lecturer Name</th>
+                            <th style="min-width: 100px;">Hours Worked</th>
+                            <th style="min-width: 100px;">Hourly Rate</th>
+                            <th style="min-width: 130px;">Date</th>
+                            <th style="min-width: 150px;">Total Amount</th>
+                            <th style="min-width: 100px;">Status</th>
+                            <th style="min-width: 120px;">Policy Check</th>
+                            <th style="min-width: 200px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in Model)
+                        {
+                            <tr data-claim-id="@claim.ClaimID">
+                                <td>@claim.ModuleCode</td>
+                                <td>@claim.LecturerName</td>
+                                <td>@claim.HoursWorked</td>
+                                <td>@claim.HourlyRate</td>
+                                <td>@claim.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@claim.CalculateTotalAmount()</td>
+                                <td>@claim.Status</td>
+                                <td>
+                                    @if (!claim.IsValidClaim())
+                                    {
+                                        <span class="text-warning" data-bs-toggle="tooltip" title="Policy validation failed">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">Valid</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-evenly">
+                                        <form asp-action="ApproveClaim" method="post" class="me-2">
+                                            <input type="hidden" name="claimId" value="@claim.ClaimID" />
+                                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                        </form>
+                                        <form asp-action="RejectClaim" method="post">
+                                            <input type="hidden" name="claimId" value="@claim.ClaimID" />
+                                            <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-   
     function ApproveClaim(claimId) {
         $.ajax({
             url: '@Url.Action("ApproveClaim", "Admin")',

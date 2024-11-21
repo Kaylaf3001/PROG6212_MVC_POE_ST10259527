@@ -130,6 +130,10 @@ namespace PROG6212_MVC_POE_ST10259527.Models
             {
                 return false;
             }
+            if (Date > DateTime.Now)
+            {
+                return false;
+            }
             return true;
         }
 

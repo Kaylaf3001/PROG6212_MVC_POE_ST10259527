@@ -80,54 +80,6 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         }
         //-----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // Generate and send report to HR
-        //-----------------------------------------------------------------------------------------------------
-        [HttpPost]
-        public async Task<IActionResult> GenerateReport()
-        {
-            var claims = await _sqlService.GetAllClaimsAsync();
-            var approvedClaims = claims.Where(claim => claim.Status == "Approved" && !claim.IsPaid).ToList();
-
-            if (!approvedClaims.Any())
-            {
-                TempData["ErrorMessage"] = "No approved claims to report.";
-                return RedirectToAction("VerifyClaimsView");
-            }
-
-            var reportContent = GenerateReportContent(approvedClaims);
-            var reportFileName = $"LecturerPaymentReport_{DateTime.Now:yyyyMMddHHmmss}.txt";
-
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(reportContent)))
-            {
-                await _fileService.UploadFileAsync("hrreports", reportFileName, stream);
-            }
-
-            TempData["SuccessMessage"] = "Report generated and sent to HR successfully!";
-            return RedirectToAction("VerifyClaimsView");
-        }
-        //----------------------------------------------------------------------------------------------------
-
-        //-----------------------------------------------------------------------------------------------------
-        // Generate the report content
-        //-----------------------------------------------------------------------------------------------------
-        private string GenerateReportContent(List<ClaimsModel> approvedClaims)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("Lecturer Payment Report");
-            sb.AppendLine("=====================================");
-            sb.AppendLine("Lecturer Name\tModule Code\tTotal Amount");
-
-            foreach (var claim in approvedClaims)
-            {
-                sb.AppendLine($"{claim.LecturerName}\t{claim.ModuleCode}\t{claim.CalculateTotalAmount()}");
-            }
-
-            sb.AppendLine("=====================================");
-            sb.AppendLine($"Total Amount to be Paid: {approvedClaims.Sum(c => c.CalculateTotalAmount())}");
-
-            return sb.ToString();
-        }
-        //-----------------------------------------------------------------------------------------------------
+        
     }
 }

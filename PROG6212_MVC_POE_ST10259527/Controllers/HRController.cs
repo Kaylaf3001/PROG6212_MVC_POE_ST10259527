@@ -38,7 +38,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View(reportFiles);
         }
 
-        private Dictionary<string, string> GenerateReportContent(List<ClaimsModel> claims)
+        private Dictionary<string, string> PreviewReportContent(List<ClaimsModel> claims)
         {
             var reportContent = new Dictionary<string, string>();
             foreach (var claim in claims)
@@ -120,10 +120,70 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         public IActionResult DownloadGeneratedReport()
         {
             var claims = _sqlService.GetAllClaimsAsync().Result;
-            var reportContent = GenerateReportContent(claims);
+            var reportContent = PreviewReportContent(claims);
             var byteArray = Encoding.UTF8.GetBytes(string.Join("\n", reportContent.Values));
             var stream = new MemoryStream(byteArray);
             return File(stream, "text/plain", "GeneratedReport.txt");
+        }
+
+        // Generate and send report to HR
+        [HttpPost]
+        public async Task<IActionResult> GenerateReport()
+        {
+            var claims = await _sqlService.GetAllClaimsAsync();
+            var approvedClaims = claims.Where(claim => claim.Status == "Approved" && !claim.IsPaid).ToList();
+
+            if (!approvedClaims.Any())
+            {
+                TempData["ErrorMessage"] = "No approved claims to report.";
+                return RedirectToAction("HRDashboard");
+            }
+
+            var reportContent = GenerateReportContent(approvedClaims);
+            var reportFileName = $"LecturerPaymentReport_{DateTime.Now:yyyyMMddHHmmss}.txt";
+
+            // Check if the report already exists
+            var existingReports = await _fileService.ListFilesAsync("hrreports");
+            foreach (var existingReport in existingReports)
+            {
+                var existingReportStream = await _fileService.DownloadFileAsync("hrreports", existingReport);
+                using (var reader = new StreamReader(existingReportStream))
+                {
+                    var existingReportContent = await reader.ReadToEndAsync();
+                    if (existingReportContent == reportContent)
+                    {
+                        TempData["ErrorMessage"] = "This report has already been generated. Please try again later.";
+                        return RedirectToAction("HRDashboard");
+                    }
+                }
+            }
+
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(reportContent)))
+            {
+                await _fileService.UploadFileAsync("hrreports", reportFileName, stream);
+            }
+
+            TempData["SuccessMessage"] = "Report generated and sent to HR successfully!";
+            return RedirectToAction("HRDashboard");
+        }
+
+        // Generate the report content
+        private string GenerateReportContent(List<ClaimsModel> approvedClaims)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Lecturer Payment Report");
+            sb.AppendLine("=====================================");
+            sb.AppendLine("Lecturer Name\tModule Code\tTotal Amount");
+
+            foreach (var claim in approvedClaims)
+            {
+                sb.AppendLine($"{claim.LecturerName}\t{claim.ModuleCode}\t{claim.CalculateTotalAmount()}");
+            }
+
+            sb.AppendLine("=====================================");
+            sb.AppendLine($"Total Amount to be Paid: {approvedClaims.Sum(c => c.CalculateTotalAmount())}");
+
+            return sb.ToString();
         }
     }
 }

@@ -136,6 +136,10 @@
                 <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
             }
 
+            <form asp-action="GenerateReport" method="post">
+                <button type="submit" class="btn btn-primary mb-4">Generate Report</button>
+            </form>
+
             <!-- Reports Card -->
             <div class="card">
                 <div class="card-header">Reports</div>
@@ -168,7 +172,7 @@
 
             <!-- Lecturers Card -->
             <div class="card">
-                <div class="card-header">Lecturers</div>
+                <div class="card-header">Users</div>
                 <div class="card-body">
                     <ul class="list-group">
                         @if (ViewBag.Lecturers != null)
@@ -221,4 +225,3 @@
         }
     }
 </script>
-

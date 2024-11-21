@@ -15,6 +15,30 @@
         border-radius: 8px;
     }
 
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        margin-top: 20px;
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
     .form-label {
         color: #343a40;
     }
@@ -24,21 +48,21 @@
         color: #343a40;
     }
 
-        .form-control:focus {
-            color: #343a40;
-            border-color: #80bdff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
-        }
+    .form-control:focus {
+        color: #343a40;
+        border-color: #80bdff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+    }
 
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
     }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
 
     .footer {
         background-color: rgba(23, 23, 23, 0.2);
@@ -47,42 +71,46 @@
     }
 </style>
 
-<div class="d-flex align-items-center mb-4">
-    <h1>Submit Claim</h1>
-</div>
+    <div class="card">
+        <div class="card-header">
+            Submit Claim
+        </div>
+        <div class="card-body">
+            <form id="claimForm" asp-action="AddClaim" method="post" enctype="multipart/form-data" onsubmit="event.preventDefault(); showConfirmationPopup();">
+                <div class="form-group">
+                    <label asp-for="ModuleCode" class="control-label"></label>
+                    <input asp-for="ModuleCode" class="form-control" id="moduleCode" />
+                    <span asp-validation-for="ModuleCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" type="date" id="Date" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoursWorked" class="control-label"></label>
+                    <input asp-for="HoursWorked" class="form-control" id="hoursWorked" />
+                    <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HourlyRate" class="control-label"></label>
+                    <input asp-for="HourlyRate" class="form-control" id="hourlyRate" />
+                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                </div>
 
-<form asp-action="AddClaim" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="ModuleCode" class="control-label"></label>
-        <input asp-for="ModuleCode" class="form-control" />
-        <span asp-validation-for="ModuleCode" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Date" class="control-label"></label>
-        <input asp-for="Date" class="form-control" type="date" />
-        <span asp-validation-for="Date" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="HoursWorked" class="control-label"></label>
-        <input asp-for="HoursWorked" class="form-control" />
-        <span asp-validation-for="HoursWorked" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="HourlyRate" class="control-label"></label>
-        <input asp-for="HourlyRate" class="form-control" />
-        <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                <!-- Document Upload Section -->
+                <div class="form-group mb-4">
+                    <label asp-for="SupportingDocumentName" class="form-label">Upload Supporting Document</label>
+                    <input type="file" class="form-control" id="SupportingDocument" name="SupportingDocument" accept=".pdf,.doc,.docx,.png,.jpg" />
+                    <span asp-validation-for="SupportingDocumentName" class="text-danger"></span>
+                    <small class="form-text text-muted">Accepted formats: .pdf, .doc, .docx, .png, .jpg</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Document Upload Section -->
-    <div class="form-group mb-4">
-        <label asp-for="SupportingDocumentName" class="form-label">Upload Supporting Document</label>
-        <input type="file" class="form-control" id="SupportingDocument" name="SupportingDocument" accept=".pdf,.doc,.docx,.png,.jpg" />
-        <span asp-validation-for="SupportingDocumentName" class="text-danger"></span>
-        <small class="form-text text-muted">Accepted formats: .pdf, .doc, .docx, .png, .jpg</small>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
