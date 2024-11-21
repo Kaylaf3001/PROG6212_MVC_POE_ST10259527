@@ -45,6 +45,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
     }
 
         .list-group-item:last-child {
@@ -98,7 +99,8 @@
         background-color: #f8f9fa;
         padding: 20px;
         border-radius: 8px;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        width: 100%;
     }
 
     .report-table {
@@ -150,43 +152,38 @@
                                     </form>
                                     <button type="button" class="btn btn-danger btn-sm" onclick="deleteReport('@report')">Delete</button>
                                 </div>
+                                <div class="report-content">
+                                    @if (ViewBag.ReportContent.ContainsKey(report))
+                                    {
+                                        <table class="report-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Module Code</th>
+                                                    <th>Lecturer Name</th>
+                                                    <th>Hours Worked</th>
+                                                    <th>Hourly Rate</th>
+                                                    <th>Date</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var row in ViewBag.ReportContent[report].Split('\n').Skip(1))
+                                                {
+                                                    <tr>
+                                                        @foreach (var cell in row.Split(','))
+                                                        {
+                                                            <td>@cell.Trim()</td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
                             </li>
                         }
                     </ul>
-                </div>
-            </div>
-
-            <!-- Generated Report Content -->
-            <div class="card">
-                <div class="card-header">Generated Report</div>
-                <div class="card-body">
-                    <div class="report-content">
-                        <table class="report-table">
-                            <thead>
-                                <tr>
-                                    <th>Module Code</th>
-                                    <th>Lecturer Name</th>
-                                    <th>Hours Worked</th>
-                                    <th>Hourly Rate</th>
-                                    <th>Date</th>
-                                    <th>Total Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var row in ViewBag.ReportContent)
-                                {
-                                    <tr>
-                                        @foreach (var cell in row.Split(','))
-                                        {
-                                            <td>@cell.Trim()</td>
-                                        }
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <a href="@Url.Action("DownloadGeneratedReport", "HR")" class="btn btn-primary">Download Report as TXT</a>
                 </div>
             </div>
 

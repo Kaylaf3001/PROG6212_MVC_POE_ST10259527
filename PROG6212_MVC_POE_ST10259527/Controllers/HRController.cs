@@ -30,14 +30,17 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             return View(reportFiles);
         }
 
-        private List<string> GenerateReportContent(List<ClaimsModel> claims)
+        private Dictionary<string, string> GenerateReportContent(List<ClaimsModel> claims)
         {
-            var reportRows = new List<string>
-                {
-                    "Module Code, Lecturer Name, Hours Worked, Hourly Rate, Date, Total Amount, Status"
-                };
-            reportRows.AddRange(claims.Select(claim => $"{claim.ModuleCode}, {claim.LecturerName}, {claim.HoursWorked}, {claim.HourlyRate}, {claim.Date:yyyy-MM-dd}, {claim.CalculateTotalAmount()}, {claim.Status}"));
-            return reportRows;
+            var reportContent = new Dictionary<string, string>();
+            foreach (var claim in claims)
+            {
+                var content = new StringBuilder();
+                content.AppendLine("Module Code, Lecturer Name, Hours Worked, Hourly Rate, Date, Total Amount, Status");
+                content.AppendLine($"{claim.ModuleCode}, {claim.LecturerName}, {claim.HoursWorked}, {claim.HourlyRate}, {claim.Date:yyyy-MM-dd}, {claim.CalculateTotalAmount()}, {claim.Status}");
+                reportContent[claim.SupportingDocumentName] = content.ToString();
+            }
+            return reportContent;
         }
 
         public async Task<IActionResult> DownloadReport(string fileName)
@@ -110,7 +113,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         {
             var claims = _sqlService.GetAllClaimsAsync().Result;
             var reportContent = GenerateReportContent(claims);
-            var byteArray = Encoding.UTF8.GetBytes(string.Join("\n", reportContent));
+            var byteArray = Encoding.UTF8.GetBytes(string.Join("\n", reportContent.Values));
             var stream = new MemoryStream(byteArray);
             return File(stream, "text/plain", "GeneratedReport.txt");
         }
