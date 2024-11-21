@@ -1,9 +1,11 @@
 ﻿using Azure.Storage.Files.Shares;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
@@ -15,12 +17,14 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SqlService _sqlService;
         private readonly FileService _fileService;
+        private readonly IValidator<ClaimsModel> _claimsValidator;
 
-        public LecturerController(FileService fileService, IHttpContextAccessor httpContextAccessor, SqlService sqlService)
+        public LecturerController(FileService fileService, IHttpContextAccessor httpContextAccessor, SqlService sqlService, IValidator<ClaimsModel> claimsValidator)
         {
             _fileService = fileService;
             _httpContextAccessor = httpContextAccessor;
             _sqlService = sqlService;
+            _claimsValidator = claimsValidator;
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -63,12 +67,21 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             var lecturer = await _sqlService.GetUserByIDAsync(claim.userID);
             claim.LecturerName = lecturer.FirstName;
 
-
             if (SupportingDocument != null && SupportingDocument.Length > 0)
             {
                 // Upload the file to Azure File Share
                 claim.SupportingDocumentName = SupportingDocument.FileName;
-                var fileUrl = await _fileService.UploadFileAsync("lecturer-files",SupportingDocument.FileName, SupportingDocument.OpenReadStream());
+                var fileUrl = await _fileService.UploadFileAsync("lecturer-files", SupportingDocument.FileName, SupportingDocument.OpenReadStream());
+            }
+
+            var validationResult = _claimsValidator.Validate(claim);
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                }
+                return View(claim);
             }
 
             // Add the claim to the table storage

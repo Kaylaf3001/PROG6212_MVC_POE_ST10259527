@@ -2,6 +2,7 @@
 using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
 using System.Text;
+using FluentValidation;
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
@@ -12,42 +13,37 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
     {
         private readonly SqlService _sqlService;
         private readonly FileService _fileService;
+        private readonly IValidator<ClaimsModel> _claimsValidator;
 
-        public AdminController(FileService fileService, SqlService sqlService)
+        public AdminController(FileService fileService, SqlService sqlService, IValidator<ClaimsModel> claimsValidator)
         {
             _sqlService = sqlService;
             _fileService = fileService;
+            _claimsValidator = claimsValidator;
         }
-        //-----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // Displays all the claims that need ot be verified
-        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> VerifyClaimsView()
         {
             var claims = await _sqlService.GetAllClaimsAsync();
-
             claims = claims.Where(claim => claim.Status != "Approved" && claim.Status != "Rejected").ToList();
 
             // Validate each claim and update IsValid property
             foreach (var claim in claims)
             {
-                claim.IsValid = ValidateClaims(claim);
+                var validationResult = _claimsValidator.Validate(claim);
+                claim.IsValid = validationResult.IsValid;
             }
 
             return View(claims);
         }
-        //-----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // This method is called when the admin wants to approve a claim
-        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> ApproveClaim(int claimId)
         {
             var claim = await _sqlService.GetClaimByIdAsync(claimId);
 
-            if (!ValidateClaims(claim))
+            var validationResult = _claimsValidator.Validate(claim);
+            if (!validationResult.IsValid)
             {
                 TempData["ErrorMessage"] = "Claim validation failed.";
                 return RedirectToAction("VerifyClaimsView");
@@ -59,11 +55,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             TempData["SuccessMessage"] = $"Claim {claimId} approved successfully!";
             return RedirectToAction("VerifyClaimsView");
         }
-        //-----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // This method is called when the admin wants to reject a claim
-        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> RejectClaim(int claimId)
         {
@@ -74,11 +66,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             TempData["SuccessMessage"] = $"Claim {claimId} rejected.";
             return RedirectToAction("VerifyClaimsView");
         }
-        //-----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // This method is called when the admin wants to download a file
-        //-----------------------------------------------------------------------------------------------------
         [HttpGet]
         public async Task<IActionResult> DownloadFile(string fileName)
         {
@@ -90,33 +78,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return File(fileStream, "application/octet-stream", fileName);
         }
-        //-----------------------------------------------------------------------------------------------------
-        //Validate and policy check for the claims
-        //-----------------------------------------------------------------------------------------------------
-        private bool ValidateClaims(ClaimsModel claim)
-        {
-            // Replace with your policy value
-            // Daily hours worked should not exceed 8 hours
-            double maxHours = 8;  
 
-            if (claim.HoursWorked <= 0 || claim.HoursWorked > maxHours)
-            {
-                return false;
-            }
-
-            double calculatedAmount = claim.HoursWorked * claim.HourlyRate;
-            if (calculatedAmount != claim.CalculateTotalAmount())
-            {
-                return false;
-            }
-
-            return true;
-        }
-        //-----------------------------------------------------------------------------------------------------
-
-        //-----------------------------------------------------------------------------------------------------
-        // Generate and send report to HR
-        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> GenerateReport()
         {
@@ -140,11 +102,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             TempData["SuccessMessage"] = "Report generated and sent to HR successfully!";
             return RedirectToAction("VerifyClaimsView");
         }
-        //----------------------------------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------------------------------
-        // Generate the report content
-        //-----------------------------------------------------------------------------------------------------
         private string GenerateReportContent(List<ClaimsModel> approvedClaims)
         {
             var sb = new StringBuilder();
@@ -162,6 +120,10 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return sb.ToString();
         }
-        //-----------------------------------------------------------------------------------------------------
+
+        public IActionResult Policy()
+        {
+            return View();
+        }
     }
 }

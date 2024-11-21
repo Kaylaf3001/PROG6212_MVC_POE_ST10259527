@@ -50,36 +50,42 @@
     <h1>Submit Claim</h1>
 </div>
 
-<form id="claimForm" asp-action="AddClaim" method="post" enctype="multipart/form-data">
-    <div>
-        <label for="moduleCode" class="form-label">Module Code</label>
-        <input type="text" class="form-control" id="moduleCode" name="ModuleCode" placeholder="Enter the Module Code" required />
+<form asp-action="AddClaim" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="ModuleCode" class="control-label"></label>
+        <input asp-for="ModuleCode" class="form-control" />
+        <span asp-validation-for="ModuleCode" class="text-danger"></span>
     </div>
-    <div class="form-group mb-3">
-        <label for="hoursWorked" class="form-label">Hours Worked</label>
-        <input type="number" class="form-control" id="hoursWorked" name="HoursWorked" min="0" placeholder="Enter the number of hours worked" required />
+    <div class="form-group">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
     </div>
-
-    <div class="form-group mb-3">
-        <label for="hourlyRate" class="form-label">Hourly Rate</label>
-        <input type="number" class="form-control" id="hourlyRate" name="HourlyRate" min="0" placeholder="Enter the hourly rate" required />
+    <div class="form-group">
+        <label asp-for="HoursWorked" class="control-label"></label>
+        <input asp-for="HoursWorked" class="form-control" />
+        <span asp-validation-for="HoursWorked" class="text-danger"></span>
     </div>
-
-    <!-- Date Input Section -->
-    <div class="form-group mb-3">
-        <label for="date" class="form-label">Claim Date</label>
-        <input type="date" class="form-control" id="Date" name="Date" required />
+    <div class="form-group">
+        <label asp-for="HourlyRate" class="control-label"></label>
+        <input asp-for="HourlyRate" class="form-control" />
+        <span asp-validation-for="HourlyRate" class="text-danger"></span>
     </div>
 
     <!-- Document Upload Section -->
     <div class="form-group mb-4">
-        <label for="supportingDocument" class="form-label">Upload Supporting Document</label>
-        <input type="file" class="form-control" id="supportingDocument" name="SupportingDocument" accept=".pdf,.doc,.docx,.png,.jpg" required />
+        <label asp-for="SupportingDocumentName" class="form-label">Upload Supporting Document</label>
+        <input type="file" class="form-control" id="SupportingDocument" name="SupportingDocument" accept=".pdf,.doc,.docx,.png,.jpg" />
+        <span asp-validation-for="SupportingDocumentName" class="text-danger"></span>
         <small class="form-text text-muted">Accepted formats: .pdf, .doc, .docx, .png, .jpg</small>
     </div>
 
-    <button type="button" class="btn btn-primary" onclick="showConfirmationPopup()">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
 <!-- Confirmation Popup -->
 <div id="confirmationPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">

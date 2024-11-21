@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using PROG6212_MVC_POE_ST10259527.Validators;
 
 namespace PROG6212_MVC_POE_ST10259527
 {
@@ -11,9 +14,18 @@ namespace PROG6212_MVC_POE_ST10259527
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddControllersWithViews()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ClaimsModelValidator>());
+
+            builder.Services.AddScoped<IValidator<ClaimsModel>, ClaimsModelValidator>();
+
+
+            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var connectionString = builder.Configuration["AzureStorage:ConnectionString"];
+
+
 
             // Configure DbContext
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
