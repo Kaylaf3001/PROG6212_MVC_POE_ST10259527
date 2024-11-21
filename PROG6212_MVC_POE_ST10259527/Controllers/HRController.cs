@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PROG6212_MVC_POE_ST10259527.Models;
 using PROG6212_MVC_POE_ST10259527.Services;
+using System.Text;
 
 namespace PROG6212_MVC_POE_ST10259527.Controllers
 {
@@ -20,7 +21,23 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             var reportFiles = await _fileService.ListFilesAsync("hrreports");
             var lecturers = await _sqlService.GetAllUsersAsync();
             ViewBag.Lecturers = lecturers;
+
+            // Generate report content
+            var claims = await _sqlService.GetAllClaimsAsync();
+            var reportContent = GenerateReportContent(claims);
+            ViewBag.ReportContent = reportContent;
+
             return View(reportFiles);
+        }
+
+        private List<string> GenerateReportContent(List<ClaimsModel> claims)
+        {
+            var reportRows = new List<string>
+                {
+                    "Module Code, Lecturer Name, Hours Worked, Hourly Rate, Date, Total Amount, Status"
+                };
+            reportRows.AddRange(claims.Select(claim => $"{claim.ModuleCode}, {claim.LecturerName}, {claim.HoursWorked}, {claim.HourlyRate}, {claim.Date:yyyy-MM-dd}, {claim.CalculateTotalAmount()}, {claim.Status}"));
+            return reportRows;
         }
 
         public async Task<IActionResult> DownloadReport(string fileName)
@@ -54,9 +71,15 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteReport(string fileName)
         {
-            await _fileService.DeleteFileAsync("hrreports", fileName);
-            TempData["SuccessMessage"] = $"Report {fileName} deleted successfully!";
-            return RedirectToAction("HRDashboard");
+            try
+            {
+                await _fileService.DeleteFileAsync("hrreports", fileName);
+                return Json(new { success = true, message = $"Report {fileName} deleted successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error deleting report {fileName}: {ex.Message}" });
+            }
         }
 
         // New methods for editing lecturer information
@@ -80,6 +103,16 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 return RedirectToAction("HRDashboard");
             }
             return View(lecturer);
+        }
+
+        // Method to download the generated report as a text file
+        public IActionResult DownloadGeneratedReport()
+        {
+            var claims = _sqlService.GetAllClaimsAsync().Result;
+            var reportContent = GenerateReportContent(claims);
+            var byteArray = Encoding.UTF8.GetBytes(string.Join("\n", reportContent));
+            var stream = new MemoryStream(byteArray);
+            return File(stream, "text/plain", "GeneratedReport.txt");
         }
     }
 }

@@ -79,9 +79,22 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             {
                 foreach (var error in validationResult.Errors)
                 {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    if (error.Severity == FluentValidation.Severity.Error)
+                    {
+                        ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    }
+                    else if (error.Severity == FluentValidation.Severity.Warning)
+                    {
+                        // Log the warning or handle it as needed
+                        // For example, you can add it to the ViewBag to display it in the view
+                        ViewBag.WarningMessage = error.ErrorMessage;
+                    }
                 }
-                return View(claim);
+
+                if (validationResult.Errors.Any(e => e.Severity == FluentValidation.Severity.Error))
+                {
+                    return View(claim);
+                }
             }
 
             // Add the claim to the table storage

@@ -37,6 +37,7 @@
                     <th style="min-width: 130px;">Date</th>
                     <th style="min-width: 150px;">Total Amount</th>
                     <th style="min-width: 100px;">Status</th>
+                    <th style="min-width: 120px;">Policy Check</th>
                     <th style="min-width: 200px;">Actions</th>
                 </tr>
             </thead>
@@ -52,7 +53,7 @@
                         <td>@claim.CalculateTotalAmount()</td>
                         <td>@claim.Status</td>
                         <td>
-                            @if (!claim.IsValid)
+                            @if (!claim.IsValidClaim())
                             {
                                 <span class="text-warning" data-bs-toggle="tooltip" title="Policy validation failed">
                                     <i class="fas fa-exclamation-triangle"></i>

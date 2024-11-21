@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PROG6212_MVC_POE_ST10259527.Models
 {
-    public class ClaimsModel 
+    public class ClaimsModel
     {
-        
         public int ClaimID { get; set; }
         public int userID { get; set; }
         public string LecturerName { get; set; }
@@ -24,11 +23,12 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public string? SupportingDocumentName { get; set; }
         public bool IsValid { get; set; } // Indicates if the claim meets the policy
         public bool IsPaid { get; set; } // Indicates if the claim has been paid
-        private double? totalAmount;
+
+        
+        public double TotalAmount { get; set; }
 
         public ClaimsModel()
         {
-            
         }
 
         //-----------------------------------------------------------------------------------------------------
@@ -36,8 +36,8 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         //-----------------------------------------------------------------------------------------------------
         public double CalculateTotalAmount()
         {
-            totalAmount = HoursWorked * HourlyRate;
-            return totalAmount.Value;
+            TotalAmount = HoursWorked * HourlyRate;
+            return TotalAmount;
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -119,7 +119,19 @@ namespace PROG6212_MVC_POE_ST10259527.Models
             return claim;
         }
         //-----------------------------------------------------------------------------------------------------
-
+        public bool IsValidClaim()
+        {
+            if (HoursWorked > 8)
+            {
+                return false;
+            }
+            var dayDifference = (DateTime.Now - Date).Days;
+            if (dayDifference > 90)
+            {
+                return false;
+            }
+            return true;
+        }
 
     }
 }

@@ -9,7 +9,7 @@ namespace PROG6212_MVC_POE_ST10259527.Validators
         {
             RuleFor(claim => claim.HoursWorked)
                 .GreaterThan(0).WithMessage("Hours worked must be greater than 0.")
-                .LessThanOrEqualTo(8).WithMessage("Hours worked must not exceed 8 hours.");
+                .WithSeverity(Severity.Warning); // Change to warning
 
             RuleFor(claim => claim.HourlyRate)
                 .GreaterThan(0).WithMessage("Hourly rate must be greater than 0.");
