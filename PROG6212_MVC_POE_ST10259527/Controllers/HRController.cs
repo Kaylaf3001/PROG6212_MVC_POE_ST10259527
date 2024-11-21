@@ -23,8 +23,16 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             ViewBag.Lecturers = lecturers;
 
             // Generate report content
-            var claims = await _sqlService.GetAllClaimsAsync();
-            var reportContent = GenerateReportContent(claims);
+            var reportContent = new Dictionary<string, string>();
+            foreach (var reportFile in reportFiles)
+            {
+                var fileStream = await _fileService.DownloadFileAsync("hrreports", reportFile);
+                using (var reader = new StreamReader(fileStream))
+                {
+                    var content = await reader.ReadToEndAsync();
+                    reportContent[reportFile] = content;
+                }
+            }
             ViewBag.ReportContent = reportContent;
 
             return View(reportFiles);

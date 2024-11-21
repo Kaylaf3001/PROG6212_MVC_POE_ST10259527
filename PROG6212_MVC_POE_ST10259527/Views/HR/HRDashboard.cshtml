@@ -101,6 +101,7 @@
         border-radius: 8px;
         margin-top: 10px;
         width: 100%;
+        display: none; /* Initially hidden */
     }
 
     .report-table {
@@ -151,34 +152,12 @@
                                         <button type="submit" class="btn btn-success btn-sm">Pay</button>
                                     </form>
                                     <button type="button" class="btn btn-danger btn-sm" onclick="deleteReport('@report')">Delete</button>
+                                    <button type="button" class="btn btn-warning btn-sm" onclick="togglePreview('@report')">Preview</button>
                                 </div>
-                                <div class="report-content">
+                                <div class="report-content" id="content-@report">
                                     @if (ViewBag.ReportContent.ContainsKey(report))
                                     {
-                                        <table class="report-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Module Code</th>
-                                                    <th>Lecturer Name</th>
-                                                    <th>Hours Worked</th>
-                                                    <th>Hourly Rate</th>
-                                                    <th>Date</th>
-                                                    <th>Total Amount</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var row in ViewBag.ReportContent[report].Split('\n').Skip(1))
-                                                {
-                                                    <tr>
-                                                        @foreach (var cell in row.Split(','))
-                                                        {
-                                                            <td>@cell.Trim()</td>
-                                                        }
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
+                                        <textarea class="form-control" rows="10" readonly>@ViewBag.ReportContent[report]</textarea>
                                     }
                                 </div>
                             </li>
@@ -231,4 +210,15 @@
             });
         }
     }
+
+    // Function to toggle the visibility of the report content
+    function togglePreview(report) {
+        var content = document.getElementById('content-' + report);
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+        } else {
+            content.style.display = 'none';
+        }
+    }
 </script>
+
