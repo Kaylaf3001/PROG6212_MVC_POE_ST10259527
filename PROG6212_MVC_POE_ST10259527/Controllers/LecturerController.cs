@@ -109,8 +109,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> FilterByStatus(string status)
         {
+            int lecturerID = _httpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
             var claims = await _sqlService.GetAllClaimsAsync();
-            var filteredClaims = claims.Where(c => c.Status == status).ToList();
+            var filteredClaims = claims.Where(c => c.Status == status && c.userID == lecturerID).ToList();
             return View("StatusView", filteredClaims);
         }
         //-----------------------------------------------------------------------------------------------------
@@ -120,8 +121,10 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
         //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> ClearFilters()
         {
+            int lecturerID = _httpContextAccessor.HttpContext.Session.GetInt32("UserID") ?? 0;
             var claims = await _sqlService.GetAllClaimsAsync();
-            return View("StatusView", claims);
+            var lecturerClaims = claims.Where(c => c.userID == lecturerID).ToList();
+            return View("StatusView", lecturerClaims);
         }
         //-----------------------------------------------------------------------------------------------------
 
