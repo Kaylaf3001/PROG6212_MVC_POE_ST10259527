@@ -11,6 +11,9 @@ namespace PROG6212_MVC_POE_ST10259527.Models
         public DbSet<UserProfileModel> UserProfile { get; set; }
         public DbSet<ClaimsModel> Claims { get; set; }
 
+        //-----------------------------------------------------------------------------------------------------
+        // OnModelCreating method
+        //-----------------------------------------------------------------------------------------------------
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -21,5 +24,7 @@ namespace PROG6212_MVC_POE_ST10259527.Models
             modelBuilder.Entity<ClaimsModel>()
                 .HasKey(c => c.ClaimID);
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------

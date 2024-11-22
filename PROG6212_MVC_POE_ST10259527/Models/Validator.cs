@@ -5,6 +5,9 @@ namespace PROG6212_MVC_POE_ST10259527.Validators
 {
     public class ClaimsModelValidator : AbstractValidator<ClaimsModel>
     {
+        //-----------------------------------------------------------------------------------------------------
+        // Constructor for the ClaimsModelValidator
+        //-----------------------------------------------------------------------------------------------------
         public ClaimsModelValidator()
         {
             RuleFor(claim => claim.HoursWorked)
@@ -21,5 +24,7 @@ namespace PROG6212_MVC_POE_ST10259527.Validators
             RuleFor(claim => claim.SupportingDocumentName)
                 .NotEmpty().WithMessage("Supporting document must be provided.");
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
+//-----------------------------------------------End-Of-File----------------------------------------------------

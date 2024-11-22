@@ -14,8 +14,8 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
         {
             _dummyDatabase = new List<UserProfileModel>
                 {
-                    new UserProfileModel("John", "Doe", "john.doe@example.com", "password123", false),
-                    new UserProfileModel("Jane", "Smith", "jane.smith@example.com", "password456", true)
+                    new UserProfileModel("John", "Doe", "john.doe@example.com", "password123", "Admin"),
+                    new UserProfileModel("Jane", "Smith", "jane.smith@example.com", "password456", "HR")
                 };
         }
         //-----------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
                 LastName = "Johnson",
                 Email = "alice.johnson@example.com",
                 Password = "password789",
-                IsAdmin = false
+                Role = "Lecturer"
             };
 
             // Act
@@ -110,7 +110,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("Johnson", result.LastName);
             Assert.Equal("alice.johnson@example.com", result.Email);
             Assert.Equal("password789", result.Password);
-            Assert.False(result.IsAdmin);
+            Assert.Equal("Lecturer", result.Role);
 
             // Add to dummy database
             _dummyDatabase.Add(result);
@@ -122,7 +122,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("Johnson", addedUser.LastName);
             Assert.Equal("alice.johnson@example.com", addedUser.Email);
             Assert.Equal("password789", addedUser.Password);
-            Assert.False(addedUser.IsAdmin);
+            Assert.Equal("Lecturer", addedUser.Role);
         }
         //-----------------------------------------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
                 LastName = "Brown",
                 Email = "bob.brown@example.com",
                 Password = "adminpassword",
-                IsAdmin = true
+                Role = "Admin"
             };
 
             // Act
@@ -151,7 +151,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("Brown", result.LastName);
             Assert.Equal("bob.brown@example.com", result.Email);
             Assert.Equal("adminpassword", result.Password);
-            Assert.True(result.IsAdmin);
+            Assert.Equal("Admin", result.Role);
 
             // Add to dummy database
             _dummyDatabase.Add(result);
@@ -163,7 +163,7 @@ namespace PROG6212_MVC_POE_ST10259527.Tests
             Assert.Equal("Brown", addedUser.LastName);
             Assert.Equal("bob.brown@example.com", addedUser.Email);
             Assert.Equal("adminpassword", addedUser.Password);
-            Assert.True(addedUser.IsAdmin);
+            Assert.Equal("Lecturer", addedUser.Role);
         }
         //-----------------------------------------------------------------------------------------------------
     }

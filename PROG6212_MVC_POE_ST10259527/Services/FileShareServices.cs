@@ -35,7 +35,8 @@ namespace PROG6212_MVC_POE_ST10259527.Services
         //--------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------
-        //
+        //Gets all the files in the file share
+        //--------------------------------------------------------------------------------------
         public async Task<List<string>> ListFilesAsync(string shareName)
         {
             var shareClient = _shareServiceClient.GetShareClient(shareName);
@@ -48,6 +49,11 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             }
             return files;
         }
+        //--------------------------------------------------------------------------------------
+
+        //--------------------------------------------------------------------------------------
+        //Downloads a file from the file share
+        //--------------------------------------------------------------------------------------
         public async Task<Stream> DownloadFileAsync(string shareName, string fileName)
         {
             var shareClient = _shareServiceClient.GetShareClient(shareName);
@@ -57,7 +63,11 @@ namespace PROG6212_MVC_POE_ST10259527.Services
             var downloadResponse = await fileClient.DownloadAsync();
             return downloadResponse.Value.Content;
         }
+        //--------------------------------------------------------------------------------------
 
+        //--------------------------------------------------------------------------------------
+        //Deletes a file from the file share
+        //--------------------------------------------------------------------------------------
         public async Task DeleteFileAsync(string shareName, string fileName)
         {
             var shareClient = _shareServiceClient.GetShareClient(shareName);
@@ -66,7 +76,7 @@ namespace PROG6212_MVC_POE_ST10259527.Services
 
             await fileClient.DeleteIfExistsAsync();
         }
+        //--------------------------------------------------------------------------------------
     }
-
 }
 //-----------------------------------------------End-Of-File----------------------------------------------------

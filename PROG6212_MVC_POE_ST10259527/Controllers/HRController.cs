@@ -15,7 +15,9 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             _fileService = fileService;
             _sqlService = sqlService;
         }
-
+        //-----------------------------------------------------------------------------------------------------
+        // Displays the HR Dashboard
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> HRDashboard()
         {
             var reportFiles = await _fileService.ListFilesAsync("hrreports");
@@ -37,7 +39,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return View(reportFiles);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Displays the HR Dashboard
+        //-----------------------------------------------------------------------------------------------------
         private Dictionary<string, string> PreviewReportContent(List<ClaimsModel> claims)
         {
             var reportContent = new Dictionary<string, string>();
@@ -50,7 +56,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
             return reportContent;
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Downloads the report
+        //-----------------------------------------------------------------------------------------------------
         public async Task<IActionResult> DownloadReport(string fileName)
         {
             var fileStream = await _fileService.DownloadFileAsync("hrreports", fileName);
@@ -61,7 +71,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return File(fileStream, "application/octet-stream", fileName);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Pay the report
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> PayReport(string fileName)
         {
@@ -78,7 +92,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             TempData["SuccessMessage"] = $"Payment for {fileName} processed and report removed successfully!";
             return RedirectToAction("HRDashboard");
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Delete the report
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> DeleteReport(string fileName)
         {
@@ -92,9 +110,12 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
                 return Json(new { success = false, message = $"Error deleting report {fileName}: {ex.Message}" });
             }
         }
+        //-----------------------------------------------------------------------------------------------------
 
-        // New methods for editing lecturer information
-        public async Task<IActionResult> EditLecturer(int id)
+        //-----------------------------------------------------------------------------------------------------
+        // Edit user information
+        //-----------------------------------------------------------------------------------------------------
+        public async Task<IActionResult> EditUser(int id)
         {
             var lecturer = await _sqlService.GetUserByIDAsync(id);
             if (lecturer == null)
@@ -103,9 +124,13 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
             return View(lecturer);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
+        // Update user information
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
-        public async Task<IActionResult> EditLecturer(UserProfileModel lecturer)
+        public async Task<IActionResult> EditUser(UserProfileModel lecturer)
         {
             if (ModelState.IsValid)
             {
@@ -115,8 +140,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             }
             return View(lecturer);
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
         // Method to download the generated report as a text file
+        //-----------------------------------------------------------------------------------------------------
         public IActionResult DownloadGeneratedReport()
         {
             var claims = _sqlService.GetAllClaimsAsync().Result;
@@ -125,8 +153,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             var stream = new MemoryStream(byteArray);
             return File(stream, "text/plain", "GeneratedReport.txt");
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
         // Generate and send report to HR
+        //-----------------------------------------------------------------------------------------------------
         [HttpPost]
         public async Task<IActionResult> GenerateReport()
         {
@@ -166,8 +197,11 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
             TempData["SuccessMessage"] = "Report generated and sent to HR successfully!";
             return RedirectToAction("HRDashboard");
         }
+        //-----------------------------------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------------------------------
         // Generate the report content
+        //-----------------------------------------------------------------------------------------------------
         private string GenerateReportContent(List<ClaimsModel> approvedClaims)
         {
             var sb = new StringBuilder();
@@ -185,6 +219,7 @@ namespace PROG6212_MVC_POE_ST10259527.Controllers
 
             return sb.ToString();
         }
+        //-----------------------------------------------------------------------------------------------------
     }
 }
-
+////-----------------------------------------------End-Of-File----------------------------------------------------
